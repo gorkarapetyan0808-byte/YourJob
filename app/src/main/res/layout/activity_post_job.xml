@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primaryDark"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Post a New Job"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="20dp"/>
+
+        <!-- TITLE -->
+        <EditText
+            android:id="@+id/titleInput"
+            android:hint="Job Title *"
+            android:textColor="@color/white"
+            android:textColorHint="#80FFFFFF"
+            android:backgroundTint="@color/lightBlue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- DESCRIPTION -->
+        <EditText
+            android:id="@+id/descInput"
+            android:hint="Description *"
+            android:textColor="@color/white"
+            android:textColorHint="#80FFFFFF"
+            android:backgroundTint="@color/lightBlue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:minLines="3"
+            android:gravity="top"/>
+
+        <!-- FIELD SPINNER -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Field *"
+            android:textColor="@color/lightBlue"
+            android:layout_marginTop="15dp"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/edit_text"
+            android:backgroundTint="@color/primaryBlue"
+            android:layout_marginTop="5dp">
+            <Spinner
+                android:id="@+id/fieldSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:spinnerMode="dropdown"/>
+        </FrameLayout>
+
+        <!-- CITY SPINNER -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select City *"
+            android:textColor="@color/lightBlue"
+            android:layout_marginTop="15dp"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/edit_text"
+            android:backgroundTint="@color/primaryBlue"
+            android:layout_marginTop="5dp">
+            <Spinner
+                android:id="@+id/citySpinner"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:spinnerMode="dropdown"/>
+        </FrameLayout>
+
+        <!-- AGE RANGE -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Required Age Range *"
+            android:textColor="@color/lightBlue"
+            android:layout_marginTop="15dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:drawable/edit_text"
+                android:backgroundTint="@color/primaryBlue">
+                <Spinner
+                    android:id="@+id/ageMinSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:spinnerMode="dropdown"/>
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" to "
+                android:textColor="@color/white"
+                android:layout_gravity="center_vertical"
+                android:paddingHorizontal="10dp"/>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:drawable/edit_text"
+                android:backgroundTint="@color/primaryBlue">
+                <Spinner
+                    android:id="@+id/ageMaxSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:spinnerMode="dropdown"/>
+            </FrameLayout>
+        </LinearLayout>
+
+        <!-- BUSINESS INFO -->
+        <TextView
+            android:id="@+id/businessInfo"
+            android:textColor="@color/lightBlue"
+            android:textSize="14sp"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"/>
+
+        <!-- SAVE -->
+        <Button
+            android:id="@+id/saveJobButton"
+            android:text="Post Job"
+            android:backgroundTint="@color/accentBlue"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="30dp"
+            android:textSize="18sp"/>
+
+    </LinearLayout>
+</ScrollView>

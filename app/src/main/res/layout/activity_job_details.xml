@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primaryDark">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/titleText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="5dp"/>
+
+            <TextView
+                android:id="@+id/companyText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/lightBlue"
+                android:textSize="18sp"
+                android:layout_marginBottom="20dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray_text"
+                android:layout_marginBottom="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Description:"
+                android:textColor="@color/lightBlue"
+                android:textStyle="bold"
+                android:layout_marginBottom="5dp"/>
+
+            <TextView
+                android:id="@+id/descriptionText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_marginBottom="20dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Field: " android:textColor="@color/lightBlue" android:textStyle="bold"/>
+                <TextView android:id="@+id/fieldText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/white"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="City: " android:textColor="@color/lightBlue" android:textStyle="bold"/>
+                <TextView android:id="@+id/cityText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/white"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Age required: " android:textColor="@color/lightBlue" android:textStyle="bold"/>
+                <TextView android:id="@+id/ageText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/white"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/contactText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/gray_text"
+                android:textSize="14sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="30dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray_text"
+                android:layout_marginBottom="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Apply for this job"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="15dp"/>
+
+            <TextView
+                android:id="@+id/applicantInfoDisplay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/input_background"
+                android:padding="10dp"/>
+
+            <EditText
+                android:id="@+id/messageInput"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@drawable/input_background"
+                android:hint="Your message to employer..."
+                android:textColor="@color/white"
+                android:textColorHint="@color/gray_text"
+                android:padding="15dp"
+                android:gravity="top"
+                android:layout_marginBottom="15dp"
+                android:importantForAutofill="no"/>
+
+            <Button
+                android:id="@+id/uploadCvBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Attach CV (PDF/Doc)"
+                android:textAllCaps="false"
+                android:backgroundTint="@color/gray_text"
+                android:layout_marginBottom="5dp"/>
+
+            <TextView
+                android:id="@+id/cvFileNameDisplay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No CV attached"
+                android:textColor="@color/lightBlue"
+                android:layout_marginBottom="25dp"/>
+
+            <Button
+                android:id="@+id/applyButton"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:text="Submit Application"
+                android:textColor="@color/white"
+                android:background="@drawable/button_background"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_marginBottom="50dp"/>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <ProgressBar
+        android:id="@+id/detailsProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:indeterminateTint="@color/lightBlue"/>
+
+</RelativeLayout>

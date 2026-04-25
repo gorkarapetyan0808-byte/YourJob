@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primaryDark">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Edit Business Profile"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="30dp"/>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/logoCard"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginBottom="10dp"
+            app:cardCornerRadius="60dp"
+            app:cardBackgroundColor="@color/primaryBlue"
+            xmlns:app="http://schemas.android.com/apk/res-auto">
+
+            <ImageView
+                android:id="@+id/editBusinessLogo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@android:drawable/ic_menu_gallery"/>
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/selectLogoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Logo"
+            android:layout_marginBottom="20dp"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:textColor="@color/lightBlue"/>
+
+        <EditText
+            android:id="@+id/editBusinessName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Company Name"
+            android:textColor="@color/white"
+            android:textColorHint="#80FFFFFF"
+            android:backgroundTint="@color/lightBlue"/>
+
+        <EditText
+            android:id="@+id/editBusinessPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:hint="Phone Number"
+            android:textColor="@color/white"
+            android:textColorHint="#80FFFFFF"
+            android:backgroundTint="@color/lightBlue"
+            android:inputType="phone"/>
+
+        <EditText
+            android:id="@+id/editBusinessEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:hint="Email Address"
+            android:textColor="@color/white"
+            android:textColorHint="#80FFFFFF"
+            android:backgroundTint="@color/lightBlue"
+            android:inputType="textEmailAddress"/>
+
+        <!-- City Spinner -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="City"
+            android:textColor="@color/lightBlue"
+            android:layout_marginTop="15dp"/>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/edit_text"
+            android:backgroundTint="@color/primaryBlue"
+            android:layout_marginTop="5dp">
+            <Spinner
+                android:id="@+id/editBusinessCitySpinner"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:spinnerMode="dropdown"/>
+        </FrameLayout>
+
+        <!-- Field Spinner -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Field"
+            android:textColor="@color/lightBlue"
+            android:layout_marginTop="15dp"/>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/edit_text"
+            android:backgroundTint="@color/primaryBlue"
+            android:layout_marginTop="5dp">
+            <Spinner
+                android:id="@+id/editBusinessFieldSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:spinnerMode="dropdown"/>
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/saveEditBusinessButton"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="30dp"
+            android:text="@string/save"
+            android:backgroundTint="@color/accentBlue"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
+</ScrollView>
