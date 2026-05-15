@@ -1,0 +1,82 @@
+<resources>
+    <string name="app_name">YourJob</string>
+    <string name="login">Մուտք</string>
+    <string name="email">Էլ. հասցե</string>
+    <string name="password">Գաղտնաբառ</string>
+    <string name="confirm_password">Հաստատել Գաղտնաբառը</string>
+    <string name="register_prompt">Չունե՞ք հաշիվ։ Գրանցվել</string>
+    <string name="signup">Գրանցվել</string>
+    <string name="already_have_account">Արդեն ունե՞ք հաշիվ։ Մուտք</string>
+    <string name="logout">Դուրս գալ</string>
+    <string name="delete_account">Ջնջել հաշիվը</string>
+
+    <string name="select_role">Ընտրեք ձեր դերը</string>
+    <string name="worker">Անձնական պրոֆիլ</string>
+    <string name="employer">Բիզնես պրոֆիլ</string>
+    <string name="setup_later">Կարգավորել ավելի ուշ</string>
+
+    <string name="home">Գլխավոր</string>
+    <string name="applications">Դիմումներ</string>
+    <string name="profile">Պրոֆիլ</string>
+    <string name="my_business">Բիզնես</string>
+    <string name="settings">Կարգավորումներ</string>
+
+    <string name="post_job">Տեղադրել հայտարարություն</string>
+    <string name="job_title">Աշխատանքի անվանում</string>
+    <string name="description">Նկարագրություն</string>
+    <string name="field">Ոլորտ</string>
+    <string name="city">Քաղաք</string>
+    <string name="age">Տարիք</string>
+    <string name="contact">Կապ</string>
+    <string name="company">Ընկերություն</string>
+    <string name="save">Պահպանել</string>
+    <string name="apply">Դիմել</string>
+    <string name="upload_cv">Կցել CV (PDF/Doc)</string>
+    <string name="no_file_selected">CV կցված չէ</string>
+    <string name="message_hint">Ձեր հաղորդագրությունը գործատուին…</string>
+    <string name="submit_application">Ուղարկել հայտը</string>
+    <string name="posting_as">Տեղադրվում է որպես</string>
+
+    <string name="match_perfect">ԼԻԱՐԺԵՔ ՀԱՄԸՆԿՆՈՒՄ</string>
+    <string name="match_strong">ՈՒԺԵՂ ՀԱՄԸՆԿՆՈՒՄ</string>
+    <string name="match_medium">ՄԻՋԻՆ ՀԱՄԸՆԿՆՈՒՄ</string>
+    <string name="match_good">ԼԱՎ ՀԱՄԸՆԿՆՈՒՄ</string>
+    <string name="match_age">ՏԱՐԻՔԱՅԻՆ ՀԱՄԸՆԿՆՈՒՄ</string>
+    <string name="match_recommended">ԽՈՐՀՈՒՐԴ Է ՏՐՎՈՒՄ</string>
+
+    <string name="status_pending">Սպասվում է</string>
+    <string name="status_accepted">Ընդունված</string>
+    <string name="status_rejected">Մերժված</string>
+    <string name="status_viewed">Դիտված</string>
+
+    <string name="app_info">Հավելվածի տարբերակը: 1.0.0</string>
+    <string name="about_app">YourJob-ի մասին</string>
+    <string name="language_select">Լեզու / Language</string>
+    <string name="delete_confirm_title">Ջնջե՞լ հաշիվը</string>
+    <string name="delete_confirm_msg">Վստա՞հ եք, որ ցանկանում եք ընդմիշտ ջնջել ձեր հաշիվը և դրա հետ կապված բոլոր տվյալները: Այս գործողությունը անդառնալի է:</string>
+
+    <string name="verify_email_title">Հաստատեք ձեր էլ. հասցեն</string>
+    <string name="verify_email_msg">Մենք ուղարկել ենք հաստատման հղում ձեր էլ. հասցեին: Խնդրում ենք սեղմել հղմանը՝ շարունակելու համար:</string>
+    <string name="i_verified">Ես հաստատել եմ</string>
+    <string name="resend_email">Նորից ուղարկել</string>
+    <string name="back_to_login">Վերադառնալ մուտքին</string>
+    <string name="email_not_verified">Էլ. հասցեն դեռ հաստատված չէ: Խնդրում ենք ստուգել ձեր էլ. փոստը:</string>
+
+    <string name="success_save">Հաջողությամբ պահպանվեց</string>
+    <string name="success_post">Հայտարարությունը հաջողությամբ տեղադրվեց</string>
+    <string name="success_apply">Հայտը հաջողությամբ ուղարկվեց</string>
+    <string name="error_fill_fields">Խնդրում ենք լրացնել բոլոր պարտադիր դաշտերը</string>
+    <string name="error_name_required">Անունը պարտադիր է</string>
+    <string name="profile_not_complete">Խնդրում ենք նախ լրացնել ձեր պրոֆիլը:</string>
+    <string name="no_results">Ոչինչ չի գտնվել</string>
+    <string name="favorites">Հավանածներ</string>
+
+    <string name="no_business_profile">Բիզնես պրոֆիլը բացակայում է</string>
+    <string name="setup_business_msg">Սեղմեք «Խմբագրել»՝ ձեր բիզնեսը կարգավորելու համար</string>
+    <string name="delete_business_confirm">Վստա՞հ եք, որ ցանկանում եք ջնջել բիզնես պրոֆիլը և դրա բոլոր հայտարարությունները:</string>
+
+    <string name="applicant_name">Անուն</string>
+    <string name="applicant_details">Դիմողի տվյալները</string>
+    <string name="message">Հաղորդագրություն</string>
+    <string name="years_old">տարեկան</string>
+</resources>

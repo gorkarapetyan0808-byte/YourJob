@@ -16,7 +16,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class VerifyEmailActivity extends AppCompatActivity {
 
     Button checkVerificationBtn, resendEmailBtn;
-    TextView backToLoginBtn;
+    TextView backToLoginBtn, subtitleText;
     ProgressBar progressBar;
     FirebaseAuth mAuth;
 
@@ -30,10 +30,10 @@ public class VerifyEmailActivity extends AppCompatActivity {
         checkVerificationBtn = findViewById(R.id.checkVerificationBtn);
         resendEmailBtn = findViewById(R.id.resendEmailBtn);
         backToLoginBtn = findViewById(R.id.backToLoginBtn);
+        subtitleText = findViewById(R.id.verifyEmailSubtitle);
         progressBar = findViewById(R.id.verifyProgressBar);
 
         checkVerificationBtn.setOnClickListener(v -> checkVerificationStatus());
-        
         resendEmailBtn.setOnClickListener(v -> resendVerificationEmail());
 
         backToLoginBtn.setOnClickListener(v -> {
@@ -41,6 +41,15 @@ public class VerifyEmailActivity extends AppCompatActivity {
             startActivity(new Intent(VerifyEmailActivity.this, MainActivity.class));
             finish();
         });
+        
+        updateUIStrings();
+    }
+
+    private void updateUIStrings() {
+        checkVerificationBtn.setText(R.string.i_verified);
+        resendEmailBtn.setText(R.string.resend_email);
+        backToLoginBtn.setText(R.string.back_to_login);
+        subtitleText.setText(R.string.verify_email_msg);
     }
 
     private void checkVerificationStatus() {
@@ -50,11 +59,11 @@ public class VerifyEmailActivity extends AppCompatActivity {
             user.reload().addOnCompleteListener(task -> {
                 progressBar.setVisibility(View.GONE);
                 if (user.isEmailVerified()) {
-                    Toast.makeText(VerifyEmailActivity.this, "Email Verified!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(VerifyEmailActivity.this, R.string.success_save, Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(VerifyEmailActivity.this, RoleSelectActivity.class));
                     finish();
                 } else {
-                    Toast.makeText(VerifyEmailActivity.this, "Email not verified yet. Please check your inbox.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(VerifyEmailActivity.this, R.string.email_not_verified, Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -67,9 +76,10 @@ public class VerifyEmailActivity extends AppCompatActivity {
             user.sendEmailVerification().addOnCompleteListener(task -> {
                 progressBar.setVisibility(View.GONE);
                 if (task.isSuccessful()) {
-                    Toast.makeText(VerifyEmailActivity.this, "Verification email sent!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(VerifyEmailActivity.this, R.string.success_apply, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(VerifyEmailActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    String error = task.getException() != null ? task.getException().getMessage() : "Error";
+                    Toast.makeText(VerifyEmailActivity.this, error, Toast.LENGTH_SHORT).show();
                 }
             });
         }

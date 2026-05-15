@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="cities_array">
+        <item>Ընտրել քաղաք</item>
+        <item>Երևան</item>
+        <item>Գյումրի</item>
+        <item>Վանաձոր</item>
+        <item>Աբովյան</item>
+        <item>Հրազդան</item>
+        <item>Կապան</item>
+        <item>Արտաշատ</item>
+        <item>Արմավիր</item>
+        <item>Գորիս</item>
+        <item>Մասիս</item>
+        <item>Չարենցավան</item>
+        <item>Իջևան</item>
+        <item>Սևան</item>
+        <item>Վեդի</item>
+        <item>Եղեգնաձոր</item>
+        <item>Ալավերդի</item>
+        <item>Դիլիջան</item>
+        <item>Սիսիան</item>
+        <item>Սպիտակ</item>
+        <item>Մարտունի</item>
+        <item>Աշտարակ</item>
+        <item>Թալին</item>
+    </string-array>
+
+    <string-array name="fields_array">
+        <item>Ընտրել ոլորտ</item>
+        <item>Ծրագրավորում / IT</item>
+        <item>Frontend Developer</item>
+        <item>Backend Developer</item>
+        <item>Mobile Developer</item>
+        <item>QA / Testing</item>
+        <item>DevOps</item>
+        <item>UI/UX Design</item>
+        <item>Graphic Design</item>
+        <item>Marketing</item>
+        <item>SMM</item>
+        <item>SEO</item>
+        <item>Sales</item>
+        <item>Customer Support</item>
+        <item>Finance</item>
+        <item>Accounting</item>
+        <item>HR</item>
+        <item>Education</item>
+        <item>Medicine</item>
+    </string-array>
+</resources>

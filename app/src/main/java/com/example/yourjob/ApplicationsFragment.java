@@ -15,12 +15,22 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class ApplicationsFragment extends Fragment {
 
     RecyclerView recyclerView;
-    AppAdapter adapter;
+    ApplicationAdapter adapter;
+    List<Application> myAppsList = new ArrayList<>();
+    String userId;
 
     public ApplicationsFragment() {}
 
@@ -29,72 +39,39 @@ public class ApplicationsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_applications, container, false);
         
+        userId = FirebaseAuth.getInstance().getUid();
         recyclerView = view.findViewById(R.id.appsRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         
-        // 🔥 LOAD PERSISTED APPLICATIONS
-        JobStorage.loadApplications(getContext());
-        
-        adapter = new AppAdapter(JobStorage.applications);
+        // Pass 'false' because this is the Applicant view (not Employer)
+        adapter = new ApplicationAdapter(myAppsList, false);
         recyclerView.setAdapter(adapter);
+
+        loadMyApplications();
         
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (adapter != null) {
-            adapter.notifyDataSetChanged();
-        }
-    }
+    private void loadMyApplications() {
+        if (userId == null) return;
 
-    class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
-        List<Application> list;
-        AppAdapter(List<Application> list) { this.list = list; }
+        DatabaseReference db = FirebaseDatabase.getInstance("https://yourjob-59823-default-rtdb.firebaseio.com/")
+                .getReference("applications");
 
-        @NonNull
-        @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_application, parent, false);
-            return new ViewHolder(v);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            Application app = list.get(position);
-            holder.jobTitle.setText(app.jobTitle);
-            holder.details.setText("Applicant: " + app.applicantName + " (" + app.applicantAge + "y., " + app.applicantCity + ")");
-            holder.message.setText("Message: " + app.message);
-            holder.cvName.setText("CV: " + app.cvFileName);
-
-            // Open CV on click
-            holder.itemView.setOnClickListener(v -> {
-                if (app.cvUri != null && !app.cvUri.isEmpty()) {
-                    try {
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setDataAndType(Uri.parse(app.cvUri), "*/*");
-                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        startActivity(intent);
-                    } catch (Exception e) {
-                        Toast.makeText(getContext(), "Cannot open CV file", Toast.LENGTH_SHORT).show();
+        db.orderByChild("applicantId").equalTo(userId)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        myAppsList.clear();
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            Application app = ds.getValue(Application.class);
+                            if (app != null) myAppsList.add(app);
+                        }
+                        adapter.notifyDataSetChanged();
                     }
-                }
-            });
-        }
 
-        @Override
-        public int getItemCount() { return list.size(); }
-
-        class ViewHolder extends RecyclerView.ViewHolder {
-            TextView jobTitle, details, message, cvName;
-            ViewHolder(View itemView) {
-                super(itemView);
-                jobTitle = itemView.findViewById(R.id.appJobTitle);
-                details = itemView.findViewById(R.id.appDetails);
-                message = itemView.findViewById(R.id.appMessage);
-                cvName = itemView.findViewById(R.id.appCvName);
-            }
-        }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {}
+                });
     }
 }

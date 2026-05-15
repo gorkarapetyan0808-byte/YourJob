@@ -12,28 +12,29 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp">
 
-        <ImageButton
-            android:id="@+id/backBtn"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_revert"
-            android:contentDescription="Back"
-            android:tint="@color/white" />
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Settings"
+            android:text="@string/settings"
             android:textColor="@color/white"
             android:textSize="24sp"
             android:textStyle="bold" />
     </RelativeLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/language_select"
+        android:textColor="@color/lightBlue"
+        android:textSize="14sp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="5dp"/>
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
         app:cardBackgroundColor="@color/card_bg"
         app:cardCornerRadius="12dp"
         app:cardElevation="0dp">
@@ -42,29 +43,31 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="10dp">
+            android:padding="5dp">
 
-            <!-- App Info -->
             <TextView
+                android:id="@+id/langEnBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
-                android:text="App Version: 1.0.0"
-                android:textColor="@color/gray_text"
-                android:textSize="16sp" />
+                android:text="English"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#1AFFFFFF" />
 
-            <!-- About -->
             <TextView
-                android:id="@+id/aboutBtn"
+                android:id="@+id/langHyBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
-                android:text="About YourJob"
+                android:text="Հայերեն"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:background="?attr/selectableItemBackground"
@@ -73,6 +76,18 @@
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/adminPanelBtn"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:text="Admin Panel"
+        android:backgroundTint="@color/lightBlue"
+        android:textColor="@color/primaryDark"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:layout_marginBottom="20dp"
+        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"/>
 
     <View
         android:layout_width="match_parent"
@@ -83,8 +98,20 @@
         android:id="@+id/settingsLogoutBtn"
         android:layout_width="match_parent"
         android:layout_height="55dp"
+        android:backgroundTint="@color/accentBlue"
+        android:text="@string/logout"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp"
+        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"/>
+
+    <Button
+        android:id="@+id/settingsDeleteAccountBtn"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
         android:backgroundTint="#B22222"
-        android:text="Log Out"
+        android:text="@string/delete_account"
         android:textColor="@color/white"
         android:textSize="18sp"
         android:textStyle="bold"

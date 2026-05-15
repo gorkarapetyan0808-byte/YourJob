@@ -10,9 +10,9 @@ public class Job {
     public String contact;
     public String city;
     public String publisherId;
+    public boolean isApproved;
 
     public Job() {
-        // Default constructor required for calls to DataSnapshot.getValue(Job.class)
     }
 
     public Job(String id, String title, String company, String description,
@@ -26,5 +26,6 @@ public class Job {
         this.contact = contact;
         this.city = city;
         this.publisherId = publisherId;
+        this.isApproved = false;
     }
 }

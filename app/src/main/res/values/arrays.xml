@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="cities_array">
+        <item>Select City</item>
+        <item>Yerevan</item>
+        <item>Gyumri</item>
+        <item>Vanadzor</item>
+        <item>Abovyan</item>
+        <item>Hrazdan</item>
+        <item>Kapan</item>
+        <item>Artashat</item>
+        <item>Armavir</item>
+        <item>Goris</item>
+        <item>Masis</item>
+        <item>Charentsavan</item>
+        <item>Ijevan</item>
+        <item>Sevan</item>
+        <item>Vedi</item>
+        <item>Yeghegnadzor</item>
+        <item>Alaverdi</item>
+        <item>Dilijan</item>
+        <item>Sisian</item>
+        <item>Spitak</item>
+        <item>Martuni</item>
+        <item>Ashtarak</item>
+        <item>Talin</item>
+    </string-array>
+
+    <string-array name="fields_array">
+        <item>Select Field</item>
+        <item>IT / Programming</item>
+        <item>Frontend Developer</item>
+        <item>Backend Developer</item>
+        <item>Mobile Developer</item>
+        <item>QA / Testing</item>
+        <item>DevOps</item>
+        <item>UI/UX Design</item>
+        <item>Graphic Design</item>
+        <item>Marketing</item>
+        <item>SMM</item>
+        <item>SEO</item>
+        <item>Sales</item>
+        <item>Customer Support</item>
+        <item>Finance</item>
+        <item>Accounting</item>
+        <item>HR</item>
+        <item>Education</item>
+        <item>Medicine</item>
+    </string-array>
+</resources>

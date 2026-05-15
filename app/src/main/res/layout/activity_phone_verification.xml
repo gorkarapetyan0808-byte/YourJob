@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primaryDark"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center_horizontal">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/verify_phone"
+        android:textColor="@color/white"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="10dp"/>
+
+    <TextView
+        android:id="@+id/phoneDisplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+374 XX XXX XXX"
+        android:textColor="@color/lightBlue"
+        android:textSize="16sp"
+        android:layout_marginBottom="40dp"/>
+
+    <EditText
+        android:id="@+id/verificationCodeInput"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@drawable/input_background"
+        android:hint="@string/enter_code"
+        android:textColor="@color/white"
+        android:textColorHint="@color/gray_text"
+        android:paddingHorizontal="16dp"
+        android:inputType="number"
+        android:maxLength="6"
+        android:gravity="center"
+        android:letterSpacing="0.5"
+        android:textSize="20sp"
+        android:importantForAutofill="no"/>
+
+    <Button
+        android:id="@+id/verifyCodeBtn"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/verify"
+        android:textColor="@color/white"
+        android:background="@drawable/button_background"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"/>
+
+    <TextView
+        android:id="@+id/resendCodeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Resend Code"
+        android:textColor="@color/lightBlue"
+        android:layout_marginTop="20dp"
+        android:padding="10dp"
+        android:clickable="true"
+        android:focusable="true"/>
+
+    <ProgressBar
+        android:id="@+id/verifyProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:visibility="gone"
+        android:indeterminateTint="@color/lightBlue"/>
+
+</LinearLayout>

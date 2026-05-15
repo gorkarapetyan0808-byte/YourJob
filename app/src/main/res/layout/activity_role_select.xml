@@ -11,7 +11,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Choose your profile type"
+        android:text="@string/select_role"
         android:textSize="28sp"
         android:textStyle="bold"
         android:textColor="@color/white"
@@ -39,11 +39,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Personal Profile"
+                android:text="@string/worker"
                 android:textColor="@color/white"
                 android:textSize="22sp"
-                android:textStyle="bold"
-                android:tag="no_click"/>
+                android:textStyle="bold"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -51,7 +50,7 @@
                 android:textColor="@color/lightBlue"
                 android:layout_marginTop="4dp"
                 android:textSize="14sp"
-                android:tag="no_click"/>
+                android:visibility="gone"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -76,11 +75,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Business Profile"
+                android:text="@string/employer"
                 android:textColor="@color/white"
                 android:textSize="22sp"
-                android:textStyle="bold"
-                android:tag="no_click"/>
+                android:textStyle="bold"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -88,7 +86,7 @@
                 android:textColor="@color/lightBlue"
                 android:layout_marginTop="4dp"
                 android:textSize="14sp"
-                android:tag="no_click"/>
+                android:visibility="gone"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -96,7 +94,7 @@
         android:id="@+id/setupLaterButton"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:text="Set up later"
+        android:text="@string/setup_later"
         android:textColor="@color/white"
         android:backgroundTint="@color/lightBlue"
         android:textAllCaps="false"

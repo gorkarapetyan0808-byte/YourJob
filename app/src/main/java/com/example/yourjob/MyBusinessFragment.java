@@ -1,6 +1,7 @@
 package com.example.yourjob;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,6 +14,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Button;
 import android.widget.Toast;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.content.ContentResolver;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.FileNotFoundException;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,7 +39,7 @@ import java.util.List;
 
 public class MyBusinessFragment extends Fragment {
 
-    TextView displayName, displayContact, displayLocation;
+    TextView displayName, displayContact, displayLocation, approvalStatus;
     ImageView displayLogo;
     Button editBtn, postJobBtn, deleteBusinessBtn;
     RecyclerView myJobsRecycler;
@@ -42,6 +49,7 @@ public class MyBusinessFragment extends Fragment {
 
     DatabaseReference mDatabase;
     String userId;
+    boolean isBusinessApproved = false;
 
     public MyBusinessFragment() {}
 
@@ -56,6 +64,7 @@ public class MyBusinessFragment extends Fragment {
         displayName = view.findViewById(R.id.displayBusinessName);
         displayContact = view.findViewById(R.id.displayBusinessContact);
         displayLocation = view.findViewById(R.id.displayBusinessLocation);
+        approvalStatus = view.findViewById(R.id.businessApprovalStatus);
         displayLogo = view.findViewById(R.id.displayBusinessLogo);
         editBtn = view.findViewById(R.id.editBusinessButton);
         postJobBtn = view.findViewById(R.id.postJobButton);
@@ -64,23 +73,39 @@ public class MyBusinessFragment extends Fragment {
         progressBar = view.findViewById(R.id.businessProgressBar);
 
         myJobsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        myJobList = new ArrayList<>();
+        myJobList = new ArrayList<Job>();
         adapter = new JobAdapter(myJobList);
+        adapter.setEmployerList(true); // Enable delete button
         myJobsRecycler.setAdapter(adapter);
 
-        editBtn.setOnClickListener(v -> startActivity(new Intent(getContext(), EditBusinessActivity.class)));
-
-        postJobBtn.setOnClickListener(v -> {
-            if (TextUtils.isEmpty(BusinessManager.getName(getContext()))) {
-                Toast.makeText(getContext(), "Please create a business profile first!", Toast.LENGTH_LONG).show();
+        editBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 startActivity(new Intent(getContext(), EditBusinessActivity.class));
-            } else {
-                startActivity(new Intent(getContext(), PostJobActivity.class));
+            }
+        });
+
+        postJobBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (TextUtils.isEmpty(BusinessManager.getName(getContext()))) {
+                    Toast.makeText(getContext(), "Please create a business profile first!", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(getContext(), EditBusinessActivity.class));
+                } else if (!isBusinessApproved) {
+                    Toast.makeText(getContext(), "Your business profile is pending approval. You cannot post jobs yet.", Toast.LENGTH_LONG).show();
+                } else {
+                    startActivity(new Intent(getContext(), PostJobActivity.class));
+                }
             }
         });
 
         if (deleteBusinessBtn != null) {
-            deleteBusinessBtn.setOnClickListener(v -> showDeleteConfirmationDialog());
+            deleteBusinessBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showDeleteBusinessConfirmation();
+                }
+            });
         }
 
         adapter.setOnItemClickListener(position -> {
@@ -91,19 +116,40 @@ public class MyBusinessFragment extends Fragment {
             startActivity(intent);
         });
 
+        adapter.setOnDeleteClickListener(position -> {
+            showDeleteJobConfirmation(myJobList.get(position).id);
+        });
+
         loadBusinessData();
         loadMyJobsFromFirebase();
 
         return view;
     }
 
-    private void showDeleteConfirmationDialog() {
+    private void showDeleteJobConfirmation(String jobId) {
         new AlertDialog.Builder(getContext())
-                .setTitle("Delete Business Profile")
-                .setMessage("Are you sure you want to delete your business profile and all its job postings? This action cannot be undone.")
-                .setPositiveButton("Delete", (dialog, which) -> deleteBusinessAndJobs())
+                .setTitle("Delete Job Posting")
+                .setMessage("Are you sure you want to delete this job?")
+                .setPositiveButton("Delete", (dialog, which) -> {
+                    mDatabase.child("jobs").child(jobId).removeValue();
+                    Toast.makeText(getContext(), "Job deleted", Toast.LENGTH_SHORT).show();
+                })
                 .setNegativeButton("Cancel", null)
                 .show();
+    }
+
+    private void showDeleteBusinessConfirmation() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Delete Business Profile");
+        builder.setMessage("Are you sure you want to delete your business profile and all its job postings?");
+        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteBusinessAndJobs();
+            }
+        });
+        builder.setNegativeButton("Cancel", null);
+        builder.show();
     }
 
     private void deleteBusinessAndJobs() {
@@ -117,22 +163,26 @@ public class MyBusinessFragment extends Fragment {
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             ds.getRef().removeValue();
                         }
-                        BusinessManager.delete(getContext());
-                        progressBar.setVisibility(View.GONE);
-                        Toast.makeText(getContext(), "Business profile and jobs deleted", Toast.LENGTH_SHORT).show();
-                        loadBusinessData();
-                        myJobList.clear();
-                        adapter.notifyDataSetChanged();
+                        if (isAdded() && getContext() != null) {
+                            BusinessManager.delete(getContext());
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(getContext(), "Deleted", Toast.LENGTH_SHORT).show();
+                            loadBusinessData();
+                            myJobList.clear();
+                            adapter.notifyDataSetChanged();
+                        }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-                        progressBar.setVisibility(View.GONE);
+                        if (isAdded()) progressBar.setVisibility(View.GONE);
                     }
                 });
     }
 
     private void loadBusinessData() {
+        if (!isAdded() || getContext() == null) return;
+
         String name = BusinessManager.getName(getContext());
         String phone = BusinessManager.getPhone(getContext());
         String email = BusinessManager.getEmail(getContext());
@@ -141,20 +191,67 @@ public class MyBusinessFragment extends Fragment {
         String field = BusinessManager.getField(getContext());
 
         if (TextUtils.isEmpty(name)) {
-            displayName.setText("No business profile");
-            displayContact.setText("Click Edit to set up your business");
+            displayName.setText("No profile");
+            displayContact.setText("Click Create to start");
             displayLocation.setVisibility(View.GONE);
+            editBtn.setText("Create");
             if (deleteBusinessBtn != null) deleteBusinessBtn.setVisibility(View.GONE);
+            if (approvalStatus != null) approvalStatus.setVisibility(View.GONE);
         } else {
             displayName.setText(name);
             displayContact.setText(phone + " | " + email);
             displayLocation.setVisibility(View.VISIBLE);
             displayLocation.setText(city + " | " + field);
+            editBtn.setText("Edit");
             if (deleteBusinessBtn != null) deleteBusinessBtn.setVisibility(View.VISIBLE);
+            
+            mDatabase.child("businesses").child(userId)
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (!isAdded()) return;
+                            Business b = snapshot.getValue(Business.class);
+                            if (b != null) {
+                                isBusinessApproved = b.isApproved;
+                                if (approvalStatus != null) {
+                                    if (isBusinessApproved) {
+                                        approvalStatus.setVisibility(View.GONE); // Hide if approved
+                                    } else {
+                                        approvalStatus.setVisibility(View.VISIBLE);
+                                        if (!TextUtils.isEmpty(b.rejectionReason)) {
+                                            approvalStatus.setText("Not Accepted: " + b.rejectionReason);
+                                            approvalStatus.setTextColor(android.graphics.Color.RED);
+                                        } else {
+                                            approvalStatus.setText("Waiting...");
+                                            approvalStatus.setTextColor(android.graphics.Color.parseColor("#FF9800"));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {}
+                    });
         }
 
         if (!TextUtils.isEmpty(logoUriStr)) {
-            displayLogo.setImageURI(Uri.parse(logoUriStr));
+            if (logoUriStr.startsWith("http") || logoUriStr.startsWith("data:image")) {
+                // For base64 or URL we might need different handling, but keeping consistency
+                displayLogo.setImageResource(android.R.drawable.ic_menu_gallery);
+            } else {
+                try {
+                    Uri logoUri = Uri.parse(logoUriStr);
+                    ContentResolver contentResolver = requireContext().getContentResolver();
+                    InputStream inputStream = contentResolver.openInputStream(logoUri);
+                    if (inputStream != null) {
+                        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                        displayLogo.setImageBitmap(bitmap);
+                        inputStream.close();
+                    }
+                } catch (Exception e) {
+                    displayLogo.setImageResource(android.R.drawable.ic_menu_gallery);
+                }
+            }
         } else {
             displayLogo.setImageResource(android.R.drawable.ic_menu_gallery);
         }
@@ -162,25 +259,21 @@ public class MyBusinessFragment extends Fragment {
 
     private void loadMyJobsFromFirebase() {
         if (userId == null) return;
-        if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
-
         mDatabase.child("jobs").orderByChild("publisherId").equalTo(userId)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (!isAdded()) return;
                         myJobList.clear();
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             Job job = ds.getValue(Job.class);
                             if (job != null) myJobList.add(job);
                         }
                         adapter.notifyDataSetChanged();
-                        if (progressBar != null) progressBar.setVisibility(View.GONE);
                     }
 
                     @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        if (progressBar != null) progressBar.setVisibility(View.GONE);
-                    }
+                    public void onCancelled(@NonNull DatabaseError error) {}
                 });
     }
 }

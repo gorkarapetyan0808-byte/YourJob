@@ -15,6 +15,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.ArrayList;
+import java.util.List;
 
 public class JobStorage {
     public static ArrayList<Job> jobs = new ArrayList<>();
@@ -41,6 +42,7 @@ public class JobStorage {
                 obj.put("contact", job.contact);
                 obj.put("city", job.city);
                 obj.put("publisherId", job.publisherId);
+                obj.put("isApproved", job.isApproved);
                 array.put(obj);
             }
             editor.putString(KEY_JOBS, array.toString());
@@ -61,22 +63,51 @@ public class JobStorage {
                 JSONArray array = new JSONArray(json);
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject obj = array.getJSONObject(i);
-                    jobs.add(new Job(
+                    Job job = new Job(
                         obj.optString("id", ""),
-                        obj.getString("title"),
-                        obj.getString("company"),
-                        obj.getString("description"),
-                        obj.getString("age"),
-                        obj.getString("field"),
-                        obj.getString("contact"),
-                        obj.getString("city"),
+                        obj.optString("title", ""),
+                        obj.optString("company", ""),
+                        obj.optString("description", ""),
+                        obj.optString("age", ""),
+                        obj.optString("field", ""),
+                        obj.optString("contact", ""),
+                        obj.optString("city", ""),
                         obj.optString("publisherId", "")
-                    ));
+                    );
+                    job.isApproved = obj.optBoolean("isApproved", false);
+                    jobs.add(job);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static void loadJobsFromFirebase(OnJobsLoadedListener callback) {
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance("https://yourjob-59823-default-rtdb.firebaseio.com/").getReference().child("jobs");
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<Job> firebaseJobs = new ArrayList<>();
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Job job = ds.getValue(Job.class);
+                    if (job != null) firebaseJobs.add(job);
+                }
+                jobs.clear();
+                jobs.addAll(firebaseJobs);
+                if (callback != null) callback.onLoaded(jobs);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                if (callback != null) callback.onError(error.getMessage());
+            }
+        });
+    }
+
+    public interface OnJobsLoadedListener {
+        void onLoaded(List<Job> loadedJobs);
+        void onError(String error);
     }
 
     public static void clearAll(Context context) {
@@ -103,6 +134,9 @@ public class JobStorage {
                 obj.put("message", app.message);
                 obj.put("cvFileName", app.cvFileName);
                 obj.put("cvUri", app.cvUri);
+                obj.put("status", app.status);
+                obj.put("viewed", app.viewed);
+                obj.put("timestamp", app.timestamp);
                 array.put(obj);
             }
             editor.putString(KEY_APPS, array.toString());
@@ -121,18 +155,22 @@ public class JobStorage {
                 JSONArray array = new JSONArray(json);
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject obj = array.getJSONObject(i);
-                    applications.add(new Application(
+                    Application app = new Application(
                         obj.optString("id", ""),
                         obj.optString("jobId", ""),
-                        obj.getString("jobTitle"),
+                        obj.optString("jobTitle", ""),
                         obj.optString("applicantId", ""),
-                        obj.getString("applicantName"),
-                        obj.getString("applicantAge"),
-                        obj.getString("applicantCity"),
-                        obj.getString("message"),
-                        obj.getString("cvFileName"),
-                        obj.getString("cvUri")
-                    ));
+                        obj.optString("applicantName", ""),
+                        obj.optString("applicantAge", ""),
+                        obj.optString("applicantCity", ""),
+                        obj.optString("message", ""),
+                        obj.optString("cvFileName", ""),
+                        obj.optString("cvUri", "")
+                    );
+                    app.status = obj.optString("status", "pending");
+                    app.viewed = obj.optBoolean("viewed", false);
+                    app.timestamp = obj.optLong("timestamp", 0);
+                    applications.add(app);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

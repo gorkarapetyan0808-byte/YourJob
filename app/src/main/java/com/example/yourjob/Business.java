@@ -8,6 +8,8 @@ public class Business {
     public String logoUri;
     public String city;
     public String field;
+    public boolean isApproved;
+    public String rejectionReason;
 
     public Business() {
     }
@@ -20,5 +22,7 @@ public class Business {
         this.logoUri = logoUri;
         this.city = city;
         this.field = field;
+        this.isApproved = false;
+        this.rejectionReason = "";
     }
 }

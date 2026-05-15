@@ -11,15 +11,15 @@ public class Application {
     public String message;
     public String cvFileName;
     public String cvUri;
-    public String status; // "pending", "accepted", "rejected"
+    public String status;
+    public boolean viewed;
     public long timestamp;
 
     public Application() {
     }
 
-    public Application(String id, String jobId, String jobTitle, String applicantId, 
-                       String applicantName, String applicantAge, String applicantCity, 
-                       String message, String cvFileName, String cvUri) {
+    public Application(String id, String jobId, String jobTitle, String applicantId, String applicantName, 
+                       String applicantAge, String applicantCity, String message, String cvFileName, String cvUri) {
         this.id = id;
         this.jobId = jobId;
         this.jobTitle = jobTitle;
@@ -31,6 +31,7 @@ public class Application {
         this.cvFileName = cvFileName;
         this.cvUri = cvUri;
         this.status = "pending";
+        this.viewed = false;
         this.timestamp = System.currentTimeMillis();
     }
 }

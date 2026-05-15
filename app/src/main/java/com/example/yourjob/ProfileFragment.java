@@ -1,6 +1,5 @@
 package com.example.yourjob;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -28,17 +27,14 @@ import java.util.List;
 
 public class ProfileFragment extends Fragment {
 
-    EditText nameInput;
+    EditText nameInput, phoneInput;
     Spinner citySpinner, ageSpinner, fieldSpinner;
     Button saveButton;
     ProgressBar progressBar;
 
-    String[] cities;
-    List<String> ages;
-    String[] fields;
-
     DatabaseReference mDatabase;
     String userId;
+    String originalPhone = "";
 
     public ProfileFragment() {}
 
@@ -49,6 +45,7 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         nameInput = view.findViewById(R.id.nameInput);
+        phoneInput = view.findViewById(R.id.profilePhoneInput);
         citySpinner = view.findViewById(R.id.citySpinner);
         ageSpinner = view.findViewById(R.id.ageSpinner);
         fieldSpinner = view.findViewById(R.id.fieldSpinner);
@@ -64,99 +61,128 @@ public class ProfileFragment extends Fragment {
             loadUserProfile();
         }
 
-        saveButton.setOnClickListener(v -> saveUserProfile());
+        saveButton.setOnClickListener(v -> checkPhoneAndSave());
 
         return view;
     }
 
     private void setupSpinners() {
-        cities = new String[]{
-                "Ընտրել քաղաք", "Երևան", "Գյումրի", "Վանաձոր", "Աբովյան", "Հրազդան", "Կապան",
-                "Արտաշատ", "Արմավիր", "Գորիս", "Մասիս", "Չարենցավան", "Իջևան", "Սևան", "Վեդի",
-                "Եղեգնաձոր", "Ալավերդի", "Դիլիջան", "Սիսիան", "Սպիտակ", "Մարտունի", "Աշտարակ", "Թալին"
-        };
+        if (getContext() == null) return;
 
-        ages = new ArrayList<>();
-        ages.add("Ընտրել տարիք");
-        for (int i = 16; i <= 70; i++) {
-            ages.add(String.valueOf(i));
-        }
-
-        fields = new String[]{
-                "Ընտրել ոլորտ", "Ծրագրավորում / IT", "Frontend Developer", "Backend Developer",
-                "Mobile Developer", "QA / Testing", "DevOps", "UI/UX Design", "Graphic Design",
-                "Marketing", "SMM", "SEO", "Sales", "Customer Support", "Finance", "Accounting",
-                "HR", "Education", "Medicine"
-        };
-
-        ArrayAdapter<String> cityAdapter = new ArrayAdapter<>(getContext(), R.layout.spinner_item, cities);
+        ArrayAdapter<CharSequence> cityAdapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.cities_array, R.layout.spinner_item);
         cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         citySpinner.setAdapter(cityAdapter);
 
+        ArrayAdapter<CharSequence> fieldAdapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.fields_array, R.layout.spinner_item);
+        fieldAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        fieldSpinner.setAdapter(fieldAdapter);
+
+        List<String> ages = new ArrayList<>();
+        ages.add(getString(R.string.age));
+        for (int i = 16; i <= 70; i++) {
+            ages.add(String.valueOf(i));
+        }
         ArrayAdapter<String> ageAdapter = new ArrayAdapter<>(getContext(), R.layout.spinner_item, ages);
         ageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ageSpinner.setAdapter(ageAdapter);
-
-        ArrayAdapter<String> fieldAdapter = new ArrayAdapter<>(getContext(), R.layout.spinner_item, fields);
-        fieldAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        fieldSpinner.setAdapter(fieldAdapter);
     }
 
     private void loadUserProfile() {
-        progressBar.setVisibility(View.VISIBLE);
+        if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
         mDatabase.child("users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (isAdded()) {
-                    progressBar.setVisibility(View.GONE);
-                    if (snapshot.exists()) {
-                        User user = snapshot.getValue(User.class);
-                        if (user != null) {
-                            nameInput.setText(user.name);
-                            setSpinnerSelection(citySpinner, cities, user.city);
-                            setSpinnerSelection(ageSpinner, ages.toArray(new String[0]), user.age);
-                            setSpinnerSelection(fieldSpinner, fields, user.field);
-                        }
+                if (!isAdded()) return;
+                if (progressBar != null) progressBar.setVisibility(View.GONE);
+                if (snapshot.exists()) {
+                    User user = snapshot.getValue(User.class);
+                    if (user != null) {
+                        nameInput.setText(user.name);
+                        originalPhone = user.phone;
+                        phoneInput.setText(originalPhone);
+                        
+                        setSpinnerSelection(citySpinner, getResources().getStringArray(R.array.cities_array), user.city);
+                        
+                        List<String> ages = new ArrayList<>();
+                        ages.add(getString(R.string.age));
+                        for (int i = 16; i <= 70; i++) ages.add(String.valueOf(i));
+                        setSpinnerSelection(ageSpinner, ages.toArray(new String[0]), user.age);
+                        
+                        setSpinnerSelection(fieldSpinner, getResources().getStringArray(R.array.fields_array), user.field);
                     }
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                if (isAdded()) {
-                    progressBar.setVisibility(View.GONE);
-                    Toast.makeText(getContext(), "Error loading profile", Toast.LENGTH_SHORT).show();
-                }
+                if (isAdded() && progressBar != null) progressBar.setVisibility(View.GONE);
             }
         });
     }
 
+    private void checkPhoneAndSave() {
+        String phone = phoneInput.getText().toString().trim();
+        if (TextUtils.isEmpty(phone)) {
+            phoneInput.setError("Phone is required");
+            return;
+        }
+
+        if (phone.equals(originalPhone)) {
+            saveUserProfile();
+            return;
+        }
+
+        progressBar.setVisibility(View.VISIBLE);
+        mDatabase.child("users").orderByChild("phone").equalTo(phone)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            progressBar.setVisibility(View.GONE);
+                            phoneInput.setError("This phone number is already in use");
+                            Toast.makeText(getContext(), "Phone number already in use!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            saveUserProfile();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        progressBar.setVisibility(View.GONE);
+                    }
+                });
+    }
+
     private void saveUserProfile() {
         String name = nameInput.getText().toString().trim();
+        String phone = phoneInput.getText().toString().trim();
         String city = citySpinner.getSelectedItem().toString();
         String age = ageSpinner.getSelectedItem().toString();
         String field = fieldSpinner.getSelectedItem().toString();
 
         if (TextUtils.isEmpty(name)) {
-            nameInput.setError("Name is required");
+            nameInput.setError(getString(R.string.error_name_required));
             return;
         }
 
-        progressBar.setVisibility(View.VISIBLE);
+        if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
         saveButton.setEnabled(false);
 
         mDatabase.child("users").child(userId).child("name").setValue(name);
+        mDatabase.child("users").child(userId).child("phone").setValue(phone);
+        mDatabase.child("users").child(userId).child("isPhoneVerified").setValue(true);
         mDatabase.child("users").child(userId).child("city").setValue(city);
         mDatabase.child("users").child(userId).child("age").setValue(age);
         mDatabase.child("users").child(userId).child("field").setValue(field)
                 .addOnCompleteListener(task -> {
                     if (isAdded()) {
-                        progressBar.setVisibility(View.GONE);
+                        if (progressBar != null) progressBar.setVisibility(View.GONE);
                         saveButton.setEnabled(true);
                         if (task.isSuccessful()) {
-                            Toast.makeText(getContext(), "Profile Updated Successfully!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(getContext(), "Failed to update profile", Toast.LENGTH_SHORT).show();
+                            originalPhone = phone;
+                            Toast.makeText(getContext(), getString(R.string.success_save), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -165,7 +191,7 @@ public class ProfileFragment extends Fragment {
     private void setSpinnerSelection(Spinner spinner, String[] array, String value) {
         if (value == null) return;
         for (int i = 0; i < array.length; i++) {
-            if (array[i].equals(value)) {
+            if (array[i].equalsIgnoreCase(value)) {
                 spinner.setSelection(i);
                 break;
             }

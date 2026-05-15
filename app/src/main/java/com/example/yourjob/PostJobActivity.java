@@ -1,16 +1,13 @@
 package com.example.yourjob;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.*;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +17,6 @@ public class PostJobActivity extends AppCompatActivity {
     Spinner fieldSpinner, citySpinner, ageMinSpinner, ageMaxSpinner;
     Button saveButton;
     TextView businessInfo;
-    ProgressBar progressBar;
-
-    String[] cities;
-    List<String> ages;
-    String[] fields;
 
     DatabaseReference mDatabase;
     String userId;
@@ -45,7 +37,6 @@ public class PostJobActivity extends AppCompatActivity {
         ageMaxSpinner = findViewById(R.id.ageMaxSpinner);
         saveButton = findViewById(R.id.saveJobButton);
         businessInfo = findViewById(R.id.businessInfo);
-        progressBar = new ProgressBar(this);
 
         setupSpinners();
 
@@ -54,38 +45,32 @@ public class PostJobActivity extends AppCompatActivity {
         String email = BusinessManager.getEmail(this);
         String contact = phone + " | " + email;
 
-        businessInfo.setText("Posting as: " + name + "\nContact: " + contact);
+        businessInfo.setText(getString(R.string.post_job) + ": " + name + "\n" + getString(R.string.contact) + ": " + contact);
 
-        saveButton.setOnClickListener(v -> saveJobToFirebase(name, contact));
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveJobToFirebase(name, contact);
+            }
+        });
     }
 
     private void setupSpinners() {
-        cities = new String[]{
-                "Ընտրել քաղաք", "Երևան", "Գյումրի", "Վանաձոր", "Աբովյան", "Հրազդան", "Կապան",
-                "Արտաշատ", "Արմավիր", "Գորիս", "Մասիս", "Չարենցավան", "Իջևան", "Սևան", "Վեդի",
-                "Եղեգնաձոր", "Ալավերդի", "Դիլիջան", "Սիսիան", "Սպիտակ", "Մարտունի", "Աշտարակ", "Թալին"
-        };
+        ArrayAdapter<CharSequence> cityAdapter = ArrayAdapter.createFromResource(this,
+                R.array.cities_array, R.layout.spinner_item);
+        cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        citySpinner.setAdapter(cityAdapter);
 
-        ages = new ArrayList<>();
-        ages.add("Տարիք");
+        ArrayAdapter<CharSequence> fieldAdapter = ArrayAdapter.createFromResource(this,
+                R.array.fields_array, R.layout.spinner_item);
+        fieldAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        fieldSpinner.setAdapter(fieldAdapter);
+
+        List<String> ages = new ArrayList<>();
+        ages.add(getString(R.string.age));
         for (int i = 16; i <= 70; i++) {
             ages.add(String.valueOf(i));
         }
-
-        fields = new String[]{
-                "Ընտրել ոլորտ", "Ծրագրավորում / IT", "Frontend Developer", "Backend Developer",
-                "Mobile Developer", "QA / Testing", "DevOps", "UI/UX Design", "Graphic Design",
-                "Marketing", "SMM", "SEO", "Sales", "Customer Support", "Finance", "Accounting",
-                "HR", "Education", "Medicine"
-        };
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item, cities);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        citySpinner.setAdapter(adapter);
-
-        ArrayAdapter<String> fAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, fields);
-        fAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        fieldSpinner.setAdapter(fAdapter);
 
         ArrayAdapter<String> aAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, ages);
         aAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -101,9 +86,13 @@ public class PostJobActivity extends AppCompatActivity {
         String ageMin = ageMinSpinner.getSelectedItem().toString();
         String ageMax = ageMaxSpinner.getSelectedItem().toString();
 
+        String selectField = getResources().getStringArray(R.array.fields_array)[0];
+        String selectCity = getResources().getStringArray(R.array.cities_array)[0];
+        String selectAge = getString(R.string.age);
+
         if (TextUtils.isEmpty(title) || TextUtils.isEmpty(desc) ||
-                field.equals("Ընտրել ոլորտ") || city.equals("Ընտրել քաղաք") || 
-                ageMin.equals("Տարիք") || ageMax.equals("Տարիք")) {
+                field.equals(selectField) || city.equals(selectCity) || 
+                ageMin.equals(selectAge) || ageMax.equals(selectAge)) {
             Toast.makeText(this, "Please fill all required fields", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -118,7 +107,7 @@ public class PostJobActivity extends AppCompatActivity {
             mDatabase.child("jobs").child(jobId).setValue(job)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            Toast.makeText(PostJobActivity.this, "Job posted successfully!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PostJobActivity.this, getString(R.string.success_post), Toast.LENGTH_SHORT).show();
                             finish();
                         } else {
                             saveButton.setEnabled(true);

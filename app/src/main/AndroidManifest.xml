@@ -16,6 +16,12 @@
         android:theme="@style/Theme.YourJob">
 
         <activity
+            android:name=".AdminActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PhoneVerificationActivity"
+            android:exported="false" />
+        <activity
             android:name=".SettingsActivity"
             android:exported="false" />
         <activity

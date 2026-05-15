@@ -1,27 +1,34 @@
 <resources>
     <string name="app_name">YourJob</string>
 
+    <!-- Login & Register -->
     <string name="login">Login</string>
-    <string name="email">Email</string>
+    <string name="email">Email Address</string>
+    <string name="phone">Phone Number</string>
     <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="register_prompt">Don\'t have an account? Register</string>
+    <string name="signup">Sign Up</string>
+    <string name="already_have_account">Already have an account? Login</string>
+    <string name="logout">Log Out</string>
+    <string name="delete_account">Delete Account</string>
 
-    <string name="select_role">Select your role</string>
-    <string name="worker">Worker</string>
-    <string name="employer">Employer</string>
+    <!-- Role Selection -->
+    <string name="select_role">Choose your profile type</string>
+    <string name="worker">Personal Profile</string>
+    <string name="employer">Business Profile</string>
+    <string name="setup_later">Set up later</string>
 
+    <!-- Navigation -->
     <string name="home">Home</string>
     <string name="applications">Applications</string>
     <string name="profile">Profile</string>
-    <string name="my_business">My Business</string>
-    <string name="post_job">Post Job</string>
+    <string name="my_business">Business</string>
+    <string name="settings">Settings</string>
+    <string name="favorites">Favorites</string>
 
-    <string name="save">Save</string>
-    <string name="post">Post</string>
-    <string name="apply">Apply</string>
-    <string name="upload_cv">Upload CV (PDF/DOC)</string>
-    <string name="no_file_selected">No file selected</string>
-    <string name="message_hint">Write a message here...</string>
-
+    <!-- Job Posting & Editing -->
+    <string name="post_job">Post a New Job</string>
     <string name="job_title">Job Title</string>
     <string name="description">Description</string>
     <string name="field">Field</string>
@@ -29,11 +36,65 @@
     <string name="age">Age</string>
     <string name="contact">Contact</string>
     <string name="company">Company</string>
+    <string name="save">Save</string>
+    <string name="apply">Apply</string>
+    <string name="upload_cv">Attach CV (PDF/Doc)</string>
+    <string name="no_file_selected">No CV attached</string>
+    <string name="message_hint">Your message to employer...</string>
+    <string name="submit_application">Submit Application</string>
+    <string name="cv_prefix">CV: %1$s</string>
 
+    <!-- Applicant Info -->
+    <string name="applicant_info_format">Name: %1$s, Age: %2$s, City: %3$s</string>
+    <string name="profile_not_complete">Profile not complete. Please update your profile in settings.</string>
+    <string name="error_name_required">Name is required</string>
+
+    <!-- Match Status -->
+    <string name="match_perfect">PERFECT MATCH</string>
+    <string name="match_strong">STRONG MATCH</string>
+    <string name="match_medium">MEDIUM MATCH</string>
+    <string name="match_good">GOOD MATCH</string>
+    <string name="match_age">AGE MATCHED</string>
+    <string name="match_recommended">RECOMMENDED</string>
+
+    <!-- Application Status -->
+    <string name="status_pending">Pending</string>
+    <string name="status_accepted">Accepted</string>
+    <string name="status_rejected">Rejected</string>
+    <string name="status_viewed">Viewed</string>
+
+    <!-- Settings -->
+    <string name="language_select">Language / Լեզու</string>
+    <string name="delete_confirm_title">Delete Account?</string>
+    <string name="delete_confirm_msg">Are you sure you want to permanently delete your account and all associated data? This action cannot be undone.</string>
+
+    <!-- Verification -->
+    <string name="verify_email_title">Verify Your Email</string>
+    <string name="verify_email_msg">We\'ve sent a verification link to your email. Please click the link to continue.</string>
+    <string name="i_verified">I\'ve Verified My Email</string>
+    <string name="resend_email">Resend Email</string>
+    <string name="back_to_login">Back to Login</string>
+    <string name="email_not_verified">Please verify your email first</string>
+    <string name="verify_phone">Verify Phone</string>
+    <string name="enter_code">Enter 6-digit code</string>
+    <string name="verify">Verify</string>
+    <string name="phone_verified">Phone verified!</string>
+
+    <!-- Success/Error Messages -->
     <string name="success_save">Saved successfully</string>
     <string name="success_post">Job posted successfully</string>
-    <string name="success_apply">Application sent successfully</string>
+    <string name="success_apply">Applied Successfully!</string>
+    <string name="error_fill_fields">Please fill all required fields</string>
+    <string name="no_results">No results found</string>
 
-    <string name="profile_not_complete">Please complete your profile to apply</string>
-    <string name="applicant_details">Your Details</string>
+    <string name="no_business_profile">No business profile</string>
+    <string name="setup_business_msg">Click Create to set up your business</string>
+    <string name="create_business_profile">Create Business Profile</string>
+    <string name="edit_business_profile">Edit Business Profile</string>
+
+    <!-- Filters -->
+    <string name="filter_field">Field</string>
+    <string name="filter_age">Age</string>
+    <string name="all_fields">All Fields</string>
+    <string name="all_ages">All Ages</string>
 </resources>
