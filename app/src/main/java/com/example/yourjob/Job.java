@@ -11,6 +11,7 @@ public class Job {
     public String city;
     public String publisherId;
     public boolean isApproved;
+    public long timestamp;
 
     public Job() {
     }
@@ -27,5 +28,6 @@ public class Job {
         this.city = city;
         this.publisherId = publisherId;
         this.isApproved = false;
+        this.timestamp = System.currentTimeMillis();
     }
 }

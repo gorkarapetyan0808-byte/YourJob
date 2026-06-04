@@ -1,5 +1,6 @@
 package com.example.yourjob;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -13,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -28,8 +30,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class HomeFragment extends Fragment {
 
@@ -37,7 +40,7 @@ public class HomeFragment extends Fragment {
     JobAdapter adapter;
     List<Job> jobList = new ArrayList<>();
     List<Job> filteredList = new ArrayList<>();
-    List<String> favoriteIds = new ArrayList<>();
+    Set<String> favoriteIds = new HashSet<>(); 
     ProgressBar progressBar;
     EditText searchEditText;
     Spinner cityFilterSpinner, fieldFilterSpinner;
@@ -45,6 +48,8 @@ public class HomeFragment extends Fragment {
     DatabaseReference mDatabase;
     String userId;
     String userCity = "", userField = "", userAge = "";
+    
+    private ValueEventListener jobsListener;
 
     public HomeFragment() {}
 
@@ -80,40 +85,52 @@ public class HomeFragment extends Fragment {
             public void afterTextChanged(Editable s) {}
         });
 
-        adapter.setOnItemClickListener(new JobAdapter.OnItemClickListener() {
-            @Override
-            public void onClick(int position) {
-                if (position >= 0 && position < filteredList.size()) {
-                    Job job = filteredList.get(position);
-                    Intent intent = new Intent(getContext(), JobDetailsActivity.class);
-                    intent.putExtra("id", job.id);
-                    intent.putExtra("title", job.title);
-                    intent.putExtra("company", job.company);
-                    intent.putExtra("description", job.description);
-                    intent.putExtra("age", job.age);
-                    intent.putExtra("field", job.field);
-                    intent.putExtra("contact", job.contact);
-                    intent.putExtra("city", job.city);
-                    startActivity(intent);
-                }
+        adapter.setOnItemClickListener(position -> {
+            if (position >= 0 && position < filteredList.size()) {
+                Job job = filteredList.get(position);
+                Intent intent = new Intent(getContext(), JobDetailsActivity.class);
+                intent.putExtra("id", job.id);
+                intent.putExtra("title", job.title);
+                intent.putExtra("company", job.company);
+                intent.putExtra("description", job.description);
+                intent.putExtra("age", job.age);
+                intent.putExtra("field", job.field);
+                intent.putExtra("contact", job.contact);
+                intent.putExtra("city", job.city);
+                startActivity(intent);
             }
         });
 
-        adapter.setOnFavoriteClickListener(new JobAdapter.OnFavoriteClickListener() {
-            @Override
-            public void onFavClick(int position, boolean isFav) {
-                if (position >= 0 && position < filteredList.size()) {
-                    toggleFavorite(filteredList.get(position).id, isFav);
-                }
+        adapter.setOnFavoriteClickListener((position, isFav) -> {
+            if (position >= 0 && position < filteredList.size()) {
+                toggleFavorite(filteredList.get(position).id, isFav);
+            }
+        });
+
+        adapter.setOnDeleteClickListener(position -> {
+            if (position >= 0 && position < filteredList.size()) {
+                showDeleteConfirmation(filteredList.get(position).id);
             }
         });
 
         return view;
     }
 
+    private void showDeleteConfirmation(String jobId) {
+        new AlertDialog.Builder(getContext())
+                .setTitle("Delete Job")
+                .setMessage("Are you sure you want to delete this job posting?")
+                .setPositiveButton("Delete", (dialog, which) -> {
+                    mDatabase.child("jobs").child(jobId).removeValue()
+                            .addOnSuccessListener(aVoid -> Toast.makeText(getContext(), "Job deleted", Toast.LENGTH_SHORT).show());
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
     private void loadUserPrefsAndFavorites() {
         if (userId == null) {
-            loadJobsFromFirebase();
+            setupJobsListener();
             return;
         }
         
@@ -124,6 +141,11 @@ public class HomeFragment extends Fragment {
                     userCity = snapshot.child("city").getValue(String.class);
                     userField = snapshot.child("field").getValue(String.class);
                     userAge = snapshot.child("age").getValue(String.class);
+                    String role = snapshot.child("role").getValue(String.class);
+
+                    if ("admin".equals(role)) {
+                        adapter.setAdmin(true);
+                    }
                     
                     if (userCity == null) userCity = "";
                     if (userField == null) userField = "";
@@ -134,7 +156,7 @@ public class HomeFragment extends Fragment {
                 loadFavorites();
             }
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { loadJobsFromFirebase(); }
+            public void onCancelled(@NonNull DatabaseError error) { setupJobsListener(); }
         });
     }
 
@@ -146,8 +168,13 @@ public class HomeFragment extends Fragment {
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     favoriteIds.add(ds.getKey());
                 }
-                adapter.setFavoriteIds(favoriteIds);
-                loadJobsFromFirebase();
+                adapter.setFavoriteIds(new ArrayList<>(favoriteIds));
+                
+                if (jobsListener == null) {
+                    setupJobsListener();
+                } else {
+                    sortAndFilter();
+                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
@@ -156,6 +183,13 @@ public class HomeFragment extends Fragment {
 
     private void toggleFavorite(String jobId, boolean isFav) {
         if (userId == null) return;
+        
+        if (isFav) favoriteIds.add(jobId);
+        else favoriteIds.remove(jobId);
+        
+        adapter.setFavoriteIds(new ArrayList<>(favoriteIds));
+        sortAndFilter();
+        
         DatabaseReference favRef = mDatabase.child("favorites").child(userId).child(jobId);
         if (isFav) favRef.setValue(true);
         else favRef.removeValue();
@@ -164,13 +198,12 @@ public class HomeFragment extends Fragment {
     private void setupFilterSpinners() {
         if (getContext() == null) return;
         
-        // City Spinner Setup
         String[] citiesArray = getResources().getStringArray(R.array.cities_array);
         List<String> cities = new ArrayList<>();
-        cities.add("City"); // Header
-        for (int i = 0; i < citiesArray.length; i++) {
-            if (!citiesArray[i].contains("Select")) {
-                cities.add(citiesArray[i]);
+        cities.add("City"); 
+        for (String s : citiesArray) {
+            if (!s.contains("Select")) {
+                cities.add(s);
             }
         }
 
@@ -178,13 +211,12 @@ public class HomeFragment extends Fragment {
         cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cityFilterSpinner.setAdapter(cityAdapter);
 
-        // Field Spinner Setup
         String[] fieldsArray = getResources().getStringArray(R.array.fields_array);
         List<String> fields = new ArrayList<>();
-        fields.add("Field"); // Header
-        for (int i = 0; i < fieldsArray.length; i++) {
-            if (!fieldsArray[i].contains("Select")) {
-                fields.add(fieldsArray[i]);
+        fields.add("Field"); 
+        for (String s : fieldsArray) {
+            if (!s.contains("Select")) {
+                fields.add(s);
             }
         }
 
@@ -200,6 +232,25 @@ public class HomeFragment extends Fragment {
         };
         cityFilterSpinner.setOnItemSelectedListener(filterListener);
         fieldFilterSpinner.setOnItemSelectedListener(filterListener);
+    }
+
+    private void sortAndFilter() {
+        Collections.sort(jobList, (j1, j2) -> {
+            boolean f1 = favoriteIds.contains(j1.id);
+            boolean f2 = favoriteIds.contains(j2.id);
+            
+            if (f1 && !f2) return -1;
+            if (!f1 && f2) return 1;
+            
+            int match1 = getMatchPercentage(j1);
+            int match2 = getMatchPercentage(j2);
+            if (match1 != match2) {
+                return Integer.compare(match2, match1);
+            }
+            
+            return Long.compare(j2.timestamp, j1.timestamp);
+        });
+        applyFilters();
     }
 
     private void applyFilters() {
@@ -227,33 +278,43 @@ public class HomeFragment extends Fragment {
         noResultsText.setVisibility(filteredList.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
-    private void loadJobsFromFirebase() {
+    private void setupJobsListener() {
         if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
-        mDatabase.child("jobs").addValueEventListener(new ValueEventListener() {
+        
+        if (jobsListener != null) {
+            mDatabase.child("jobs").removeEventListener(jobsListener);
+        }
+        
+        jobsListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (!isAdded()) return;
                 jobList.clear();
+                
+                boolean hasApproved = false;
                 if (snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         Job job = ds.getValue(Job.class);
-                        if (job != null) jobList.add(job);
+                        if (job != null) {
+                            if (job.id == null || job.id.isEmpty()) job.id = ds.getKey();
+                            jobList.add(job);
+                            if (job.isApproved) hasApproved = true;
+                        }
                     }
                 }
-                
-                Collections.sort(jobList, new Comparator<Job>() {
-                    @Override
-                    public int compare(Job j1, Job j2) {
-                        return Integer.compare(getMatchPercentage(j2), getMatchPercentage(j1));
-                    }
-                });
-                
-                applyFilters();
+
+                if (!hasApproved) {
+                    JobStorage.addProfessionalSampleJobs();
+                }
+
+                sortAndFilter();
                 if (progressBar != null) progressBar.setVisibility(View.GONE);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) { if (progressBar != null) progressBar.setVisibility(View.GONE); }
-        });
+        };
+        
+        mDatabase.child("jobs").addValueEventListener(jobsListener);
     }
 
     private int getMatchPercentage(Job job) {
@@ -277,5 +338,13 @@ public class HomeFragment extends Fragment {
             int max = Integer.parseInt(parts[1].trim());
             return uAge >= min && uAge <= max;
         } catch (Exception e) { return false; }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (jobsListener != null) {
+            mDatabase.child("jobs").removeEventListener(jobsListener);
+        }
     }
 }

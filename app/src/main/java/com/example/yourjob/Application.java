@@ -8,6 +8,7 @@ public class Application {
     public String applicantName;
     public String applicantAge;
     public String applicantCity;
+    public String applicantPhone;
     public String message;
     public String cvFileName;
     public String cvUri;
@@ -19,7 +20,7 @@ public class Application {
     }
 
     public Application(String id, String jobId, String jobTitle, String applicantId, String applicantName, 
-                       String applicantAge, String applicantCity, String message, String cvFileName, String cvUri) {
+                       String applicantAge, String applicantCity, String applicantPhone, String message, String cvFileName, String cvUri) {
         this.id = id;
         this.jobId = jobId;
         this.jobTitle = jobTitle;
@@ -27,6 +28,7 @@ public class Application {
         this.applicantName = applicantName;
         this.applicantAge = applicantAge;
         this.applicantCity = applicantCity;
+        this.applicantPhone = applicantPhone;
         this.message = message;
         this.cvFileName = cvFileName;
         this.cvUri = cvUri;

@@ -39,7 +39,7 @@ public class JobDetailsActivity extends AppCompatActivity {
 
     String selectedCvName = "";
     Uri selectedCvUri = null;
-    String applicantName, applicantAge, applicantCity;
+    String applicantName, applicantAge, applicantCity, applicantPhone;
     
     DatabaseReference mDatabase;
     String userId;
@@ -140,6 +140,7 @@ public class JobDetailsActivity extends AppCompatActivity {
                     applicantName = user.name;
                     applicantAge = user.age;
                     applicantCity = user.city;
+                    applicantPhone = user.phone;
                     applicantInfoDisplay.setText("Name: " + applicantName + ", Age: " + applicantAge);
                 } else {
                     applicantInfoDisplay.setText("Please complete your profile first!");
@@ -180,10 +181,10 @@ public class JobDetailsActivity extends AppCompatActivity {
             byte[] bytes = output.toByteArray();
             inputStream.close();
 
-            String base64Cv = Base64.encodeToString(bytes, Base64.DEFAULT);
+            String base64Cv = Base64.encodeToString(bytes, Base64.NO_WRAP);
             
-            if (bytes.length > 1.5 * 1024 * 1024) {
-                throw new Exception("File is too large! Please select a PDF smaller than 1.5MB.");
+            if (bytes.length > 4 * 1024 * 1024) {
+                throw new Exception("File is too large! Please select a PDF smaller than 4MB.");
             }
 
             saveApplication(jobTitle, message, base64Cv);
@@ -197,17 +198,26 @@ public class JobDetailsActivity extends AppCompatActivity {
 
     private void saveApplication(String jobTitle, String message, String cvData) {
         String appId = mDatabase.child("applications").push().getKey();
-        Application app = new Application(appId, jobId, jobTitle, userId, applicantName, applicantAge, applicantCity, message, selectedCvName, cvData);
+        
+        Application app = new Application(appId, jobId, jobTitle, userId, applicantName, applicantAge, applicantCity, applicantPhone, message, selectedCvName, "stored_externally");
 
         if (appId != null) {
             mDatabase.child("applications").child(appId).setValue(app).addOnCompleteListener(task -> {
-                progressBar.setVisibility(View.GONE);
                 if (task.isSuccessful()) {
-                    Toast.makeText(this, "Applied Successfully!", Toast.LENGTH_SHORT).show();
-                    applyButton.setText("Already Applied");
-                    applyButton.setEnabled(false);
-                    finish();
+                    mDatabase.child("cv_contents").child(appId).setValue(cvData).addOnCompleteListener(cvTask -> {
+                        progressBar.setVisibility(View.GONE);
+                        if (cvTask.isSuccessful()) {
+                            Toast.makeText(this, "Applied Successfully!", Toast.LENGTH_SHORT).show();
+                            applyButton.setText("Already Applied");
+                            applyButton.setEnabled(false);
+                            finish();
+                        } else {
+                            applyButton.setEnabled(true);
+                            Toast.makeText(this, "Failed to upload CV content", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 } else {
+                    progressBar.setVisibility(View.GONE);
                     applyButton.setEnabled(true);
                     Toast.makeText(this, "Failed to save application", Toast.LENGTH_SHORT).show();
                 }

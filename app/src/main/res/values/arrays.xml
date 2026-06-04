@@ -5,25 +5,52 @@
         <item>Yerevan</item>
         <item>Gyumri</item>
         <item>Vanadzor</item>
+        <item>Vagharshapat (Etchmiadzin)</item>
         <item>Abovyan</item>
-        <item>Hrazdan</item>
         <item>Kapan</item>
-        <item>Artashat</item>
+        <item>Hrazdan</item>
         <item>Armavir</item>
-        <item>Goris</item>
-        <item>Masis</item>
-        <item>Charentsavan</item>
+        <item>Artashat</item>
         <item>Ijevan</item>
+        <item>Gavar</item>
+        <item>Goris</item>
+        <item>Charentsavan</item>
+        <item>Ararat</item>
+        <item>Masis</item>
+        <item>Ashtarak</item>
         <item>Sevan</item>
-        <item>Vedi</item>
-        <item>Yeghegnadzor</item>
-        <item>Alaverdi</item>
+        <item>Artik</item>
+        <item>Spitak</item>
         <item>Dilijan</item>
         <item>Sisian</item>
-        <item>Spitak</item>
+        <item>Yeghvard</item>
+        <item>Vedi</item>
+        <item>Vardenis</item>
         <item>Martuni</item>
-        <item>Ashtarak</item>
+        <item>Stepanavan</item>
+        <item>Yeghegnadzor</item>
+        <item>Nor Hachn</item>
+        <item>Metsamor</item>
+        <item>Berd</item>
+        <item>Kajaran</item>
+        <item>Tashir</item>
+        <item>Vayk</item>
+        <item>Byureghavan</item>
+        <item>Alaverdi</item>
+        <item>Aparan</item>
+        <item>Chambarak</item>
+        <item>Jermuk</item>
+        <item>Maralik</item>
         <item>Talin</item>
+        <item>Noyemberyan</item>
+        <item>Tsaghkadzor</item>
+        <item>Meghri</item>
+        <item>Ayrum</item>
+        <item>Akhtala</item>
+        <item>Tumanyan</item>
+        <item>Agarak</item>
+        <item>Dastakert</item>
+        <item>Shamlugh</item>
     </string-array>
 
     <string-array name="fields_array">
@@ -33,18 +60,49 @@
         <item>Backend Developer</item>
         <item>Mobile Developer</item>
         <item>QA / Testing</item>
-        <item>DevOps</item>
+        <item>DevOps / Cloud</item>
         <item>UI/UX Design</item>
         <item>Graphic Design</item>
-        <item>Marketing</item>
+        <item>Marketing / PR</item>
         <item>SMM</item>
         <item>SEO</item>
-        <item>Sales</item>
+        <item>Content Writing / Copywriting</item>
+        <item>Sales / Business Development</item>
         <item>Customer Support</item>
-        <item>Finance</item>
+        <item>Finance / Banking</item>
         <item>Accounting</item>
-        <item>HR</item>
-        <item>Education</item>
-        <item>Medicine</item>
+        <item>HR / Recruiting</item>
+        <item>Education / Teaching</item>
+        <item>Medicine / Pharmacy</item>
+        <item>Dentistry</item>
+        <item>Construction / Architecture</item>
+        <item>Engineering</item>
+        <item>Tourism / Hospitality</item>
+        <item>Service / Catering / Waiter</item>
+        <item>Cook / Chef</item>
+        <item>Logistics / Delivery</item>
+        <item>Driver (Taxi/Truck/Courier)</item>
+        <item>Beauty / Spa / Hairdresser</item>
+        <item>Sport / Fitness Instructor</item>
+        <item>Security / Guard</item>
+        <item>Agriculture / Farming</item>
+        <item>Manufacturing / Factory</item>
+        <item>Legal / Law</item>
+        <item>Translation / Linguistics</item>
+        <item>Real Estate</item>
+        <item>Auto Service / Car Repair</item>
+        <item>Retail / Cashier</item>
+        <item>Cleaning / Housekeeping</item>
+        <item>Media / Journalism</item>
+        <item>Arts / Entertainment</item>
+        <item>Government / Public Sector</item>
+        <item>Science / Research</item>
+        <item>Fashion / Apparel</item>
+        <item>Insurance</item>
+        <item>Telecommunications</item>
+        <item>Photography / Videography</item>
+        <item>Event Planning</item>
+        <item>NGO / Non-profit</item>
+        <item>Administration / Office work</item>
     </string-array>
 </resources>

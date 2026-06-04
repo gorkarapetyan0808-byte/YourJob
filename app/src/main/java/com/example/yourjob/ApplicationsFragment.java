@@ -43,7 +43,6 @@ public class ApplicationsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.appsRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         
-        // Pass 'false' because this is the Applicant view (not Employer)
         adapter = new ApplicationAdapter(myAppsList, false);
         recyclerView.setAdapter(adapter);
 

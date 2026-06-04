@@ -5,19 +5,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.os.LocaleListCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -31,8 +27,6 @@ public class SettingsActivity extends AppCompatActivity {
         Button logoutBtn = findViewById(R.id.settingsLogoutBtn);
         Button deleteAccBtn = findViewById(R.id.settingsDeleteAccountBtn);
         Button adminPanelBtn = findViewById(R.id.adminPanelBtn);
-        TextView langEnBtn = findViewById(R.id.langEnBtn);
-        TextView langHyBtn = findViewById(R.id.langHyBtn);
 
         checkAdminStatus(adminPanelBtn);
 
@@ -45,9 +39,6 @@ public class SettingsActivity extends AppCompatActivity {
         if (adminPanelBtn != null) {
             adminPanelBtn.setOnClickListener(v -> startActivity(new Intent(SettingsActivity.this, AdminActivity.class)));
         }
-
-        langEnBtn.setOnClickListener(v -> changeLanguage("en"));
-        langHyBtn.setOnClickListener(v -> changeLanguage("hy"));
     }
 
     private void checkAdminStatus(Button adminBtn) {
@@ -70,11 +61,6 @@ public class SettingsActivity extends AppCompatActivity {
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {}
                 });
-    }
-
-    private void changeLanguage(String langCode) {
-        LocaleListCompat appLocales = LocaleListCompat.forLanguageTags(langCode);
-        AppCompatDelegate.setApplicationLocales(appLocales);
     }
 
     private void logoutUser() {
@@ -101,10 +87,11 @@ public class SettingsActivity extends AppCompatActivity {
         if (user == null) return;
 
         String uid = user.getUid();
-        DatabaseReference db = FirebaseDatabase.getInstance("https://yourjob-59823-default-rtdb.firebaseio.com/").getReference();
-        db.child("users").child(uid).removeValue();
-        db.child("businesses").child(uid).removeValue();
-        
+        FirebaseDatabase.getInstance("https://yourjob-59823-default-rtdb.firebaseio.com/").getReference()
+                .child("users").child(uid).removeValue();
+        FirebaseDatabase.getInstance("https://yourjob-59823-default-rtdb.firebaseio.com/").getReference()
+                .child("businesses").child(uid).removeValue();
+
         user.delete().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 logoutUser();

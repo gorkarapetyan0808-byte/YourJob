@@ -18,7 +18,6 @@ public class MainMenuActivity extends AppCompatActivity {
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
-        // Check if we need to open a specific fragment
         String openFragment = getIntent().getStringExtra("open_fragment");
         Fragment initialFragment = new HomeFragment();
         int initialNavId = R.id.nav_home;
@@ -34,7 +33,6 @@ public class MainMenuActivity extends AppCompatActivity {
             initialNavId = R.id.nav_settings;
         }
 
-        // Default screen
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, initialFragment)

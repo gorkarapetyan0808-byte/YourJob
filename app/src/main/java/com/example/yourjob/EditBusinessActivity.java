@@ -1,9 +1,12 @@
 package com.example.yourjob;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -59,28 +62,35 @@ public class EditBusinessActivity extends AppCompatActivity {
         String logoUriStr = BusinessManager.getLogo(this);
         if (!TextUtils.isEmpty(logoUriStr)) {
             selectedLogoUri = Uri.parse(logoUriStr);
-            logoPreview.setImageURI(selectedLogoUri);
+            if (logoUriStr.startsWith("data:image")) {
+                try {
+                    String base64Image = logoUriStr.split(",")[1];
+                    byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    logoPreview.setImageBitmap(decodedByte);
+                } catch (Exception e) {
+                    logoPreview.setImageResource(android.R.drawable.ic_menu_gallery);
+                }
+            } else {
+                try {
+                    logoPreview.setImageURI(selectedLogoUri);
+                } catch (Exception e) {
+                    logoPreview.setImageResource(android.R.drawable.ic_menu_gallery);
+                }
+            }
         }
 
         setSpinnerSelection(citySpinner, getResources().getStringArray(R.array.cities_array), BusinessManager.getCity(this));
         setSpinnerSelection(fieldSpinner, getResources().getStringArray(R.array.fields_array), BusinessManager.getField(this));
 
-        selectLogoBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("image/*");
-                startActivityForResult(intent, 102);
-            }
+        selectLogoBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("image/*");
+            startActivityForResult(intent, 102);
         });
 
-        saveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkPhoneAndSave();
-            }
-        });
+        saveBtn.setOnClickListener(v -> checkPhoneAndSave());
     }
 
     private void checkPhoneAndSave() {
@@ -105,7 +115,6 @@ public class EditBusinessActivity extends AppCompatActivity {
             return;
         }
 
-        // Check if phone number is already used by another business/user
         mDatabase.child("users").orderByChild("phone").equalTo(phone)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -128,24 +137,17 @@ public class EditBusinessActivity extends AppCompatActivity {
                             saveBusinessData(name, phone, email, city, field);
                         }
                     }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        saveBusinessData(name, phone, email, city, field);
-                    }
+                    @Override public void onCancelled(@NonNull DatabaseError error) { saveBusinessData(name, phone, email, city, field); }
                 });
     }
 
     private void saveBusinessData(String name, String phone, String email, String city, String field) {
-        BusinessManager.save(EditBusinessActivity.this, name, phone, email, selectedLogoUri, city, field, new BusinessManager.SaveCompleteListener() {
-            @Override
-            public void onSaveComplete(boolean success) {
-                if (success) {
-                    Toast.makeText(EditBusinessActivity.this, getString(R.string.success_save), Toast.LENGTH_SHORT).show();
-                    finish();
-                } else {
-                    Toast.makeText(EditBusinessActivity.this, "Failed to save business profile", Toast.LENGTH_SHORT).show();
-                }
+        BusinessManager.save(EditBusinessActivity.this, name, phone, email, selectedLogoUri, city, field, success -> {
+            if (success) {
+                Toast.makeText(EditBusinessActivity.this, getString(R.string.success_save), Toast.LENGTH_SHORT).show();
+                finish();
+            } else {
+                Toast.makeText(EditBusinessActivity.this, "Failed to save business profile", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -177,7 +179,9 @@ public class EditBusinessActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 102 && resultCode == RESULT_OK && data != null) {
             selectedLogoUri = data.getData();
-            getContentResolver().takePersistableUriPermission(selectedLogoUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            try {
+                getContentResolver().takePersistableUriPermission(selectedLogoUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            } catch (Exception ignored) {}
             logoPreview.setImageURI(selectedLogoUri);
         }
     }

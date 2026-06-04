@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,6 @@ import android.graphics.BitmapFactory;
 import android.content.ContentResolver;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.FileNotFoundException;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -73,39 +73,26 @@ public class MyBusinessFragment extends Fragment {
         progressBar = view.findViewById(R.id.businessProgressBar);
 
         myJobsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        myJobList = new ArrayList<Job>();
+        myJobList = new ArrayList<>();
         adapter = new JobAdapter(myJobList);
-        adapter.setEmployerList(true); // Enable delete button
+        adapter.setEmployerList(true); 
         myJobsRecycler.setAdapter(adapter);
 
-        editBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getContext(), EditBusinessActivity.class));
-            }
-        });
+        editBtn.setOnClickListener(v -> startActivity(new Intent(getContext(), EditBusinessActivity.class)));
 
-        postJobBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (TextUtils.isEmpty(BusinessManager.getName(getContext()))) {
-                    Toast.makeText(getContext(), "Please create a business profile first!", Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(getContext(), EditBusinessActivity.class));
-                } else if (!isBusinessApproved) {
-                    Toast.makeText(getContext(), "Your business profile is pending approval. You cannot post jobs yet.", Toast.LENGTH_LONG).show();
-                } else {
-                    startActivity(new Intent(getContext(), PostJobActivity.class));
-                }
+        postJobBtn.setOnClickListener(v -> {
+            if (TextUtils.isEmpty(BusinessManager.getName(getContext()))) {
+                Toast.makeText(getContext(), "Please create a business profile first!", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(getContext(), EditBusinessActivity.class));
+            } else if (!isBusinessApproved) {
+                Toast.makeText(getContext(), "Your business profile is pending approval. You cannot post jobs yet.", Toast.LENGTH_LONG).show();
+            } else {
+                startActivity(new Intent(getContext(), PostJobActivity.class));
             }
         });
 
         if (deleteBusinessBtn != null) {
-            deleteBusinessBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showDeleteBusinessConfirmation();
-                }
-            });
+            deleteBusinessBtn.setOnClickListener(v -> showDeleteBusinessConfirmation());
         }
 
         adapter.setOnItemClickListener(position -> {
@@ -142,12 +129,7 @@ public class MyBusinessFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Delete Business Profile");
         builder.setMessage("Are you sure you want to delete your business profile and all its job postings?");
-        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                deleteBusinessAndJobs();
-            }
-        });
+        builder.setPositiveButton("Delete", (dialog, which) -> deleteBusinessAndJobs());
         builder.setNegativeButton("Cancel", null);
         builder.show();
     }
@@ -172,11 +154,7 @@ public class MyBusinessFragment extends Fragment {
                             adapter.notifyDataSetChanged();
                         }
                     }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        if (isAdded()) progressBar.setVisibility(View.GONE);
-                    }
+                    @Override public void onCancelled(@NonNull DatabaseError error) { if (isAdded()) progressBar.setVisibility(View.GONE); }
                 });
     }
 
@@ -186,7 +164,7 @@ public class MyBusinessFragment extends Fragment {
         String name = BusinessManager.getName(getContext());
         String phone = BusinessManager.getPhone(getContext());
         String email = BusinessManager.getEmail(getContext());
-        String logoUriStr = BusinessManager.getLogo(getContext());
+        String logoData = BusinessManager.getLogo(getContext());
         String city = BusinessManager.getCity(getContext());
         String field = BusinessManager.getField(getContext());
 
@@ -215,7 +193,7 @@ public class MyBusinessFragment extends Fragment {
                                 isBusinessApproved = b.isApproved;
                                 if (approvalStatus != null) {
                                     if (isBusinessApproved) {
-                                        approvalStatus.setVisibility(View.GONE); // Hide if approved
+                                        approvalStatus.setVisibility(View.GONE); 
                                     } else {
                                         approvalStatus.setVisibility(View.VISIBLE);
                                         if (!TextUtils.isEmpty(b.rejectionReason)) {
@@ -229,20 +207,24 @@ public class MyBusinessFragment extends Fragment {
                                 }
                             }
                         }
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {}
+                        @Override public void onCancelled(@NonNull DatabaseError error) {}
                     });
         }
 
-        if (!TextUtils.isEmpty(logoUriStr)) {
-            if (logoUriStr.startsWith("http") || logoUriStr.startsWith("data:image")) {
-                // For base64 or URL we might need different handling, but keeping consistency
-                displayLogo.setImageResource(android.R.drawable.ic_menu_gallery);
+        if (!TextUtils.isEmpty(logoData)) {
+            if (logoData.startsWith("data:image")) {
+                try {
+                    String base64Image = logoData.split(",")[1];
+                    byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    displayLogo.setImageBitmap(decodedByte);
+                } catch (Exception e) {
+                    displayLogo.setImageResource(android.R.drawable.ic_menu_gallery);
+                }
             } else {
                 try {
-                    Uri logoUri = Uri.parse(logoUriStr);
-                    ContentResolver contentResolver = requireContext().getContentResolver();
-                    InputStream inputStream = contentResolver.openInputStream(logoUri);
+                    Uri logoUri = Uri.parse(logoData);
+                    InputStream inputStream = requireContext().getContentResolver().openInputStream(logoUri);
                     if (inputStream != null) {
                         Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                         displayLogo.setImageBitmap(bitmap);
@@ -271,9 +253,7 @@ public class MyBusinessFragment extends Fragment {
                         }
                         adapter.notifyDataSetChanged();
                     }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {}
+                    @Override public void onCancelled(@NonNull DatabaseError error) {}
                 });
     }
 }

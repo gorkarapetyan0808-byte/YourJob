@@ -2,14 +2,14 @@ package com.example.yourjob;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Base64;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -37,8 +37,7 @@ public class BusinessManager {
 
         if (logoUri != null) {
             String uriStr = logoUri.toString();
-            // If it's already a base64 string or remote URL, just save
-            if (uriStr.startsWith("data:image") || uriStr.length() > 1000) {
+            if (uriStr.startsWith("data:image")) {
                 saveToDatabaseAndLocal(context, userId, name, phone, email, uriStr, city, field, listener);
                 return;
             }
@@ -50,23 +49,27 @@ public class BusinessManager {
                     return;
                 }
                 
-                ByteArrayOutputStream output = new ByteArrayOutputStream();
-                byte[] buffer = new byte[8192];
-                int bytesRead;
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    output.write(buffer, 0, bytesRead);
-                }
-                byte[] bytes = output.toByteArray();
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                 inputStream.close();
-
-                // Convert image to Base64 to avoid using Firebase Storage (Blaze plan issue)
-                String base64Image = "data:image/jpeg;base64," + Base64.encodeToString(bytes, Base64.DEFAULT);
                 
-                // Limit check: Realtime DB nodes shouldn't exceed ~10MB, but let's keep it reasonable
-                if (base64Image.length() > 1024 * 1024) { // 1MB limit for logo
-                     // Optimization: In real app, we'd resize the bitmap here
+                if (bitmap == null) {
+                    saveToDatabaseAndLocal(context, userId, name, phone, email, "", city, field, listener);
+                    return;
                 }
 
+                int maxWidth = 500;
+                int maxHeight = 500;
+                if (bitmap.getWidth() > maxWidth || bitmap.getHeight() > maxHeight) {
+                    float ratio = Math.min((float) maxWidth / bitmap.getWidth(), (float) maxHeight / bitmap.getHeight());
+                    bitmap = Bitmap.createScaledBitmap(bitmap, (int) (bitmap.getWidth() * ratio), (int) (bitmap.getHeight() * ratio), true);
+                }
+
+                ByteArrayOutputStream output = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 70, output);
+                byte[] bytes = output.toByteArray();
+
+                String base64Image = "data:image/jpeg;base64," + Base64.encodeToString(bytes, Base64.NO_WRAP);
+                
                 saveToDatabaseAndLocal(context, userId, name, phone, email, base64Image, city, field, listener);
 
             } catch (Exception e) {

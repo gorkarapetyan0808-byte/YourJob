@@ -22,61 +22,6 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/language_select"
-        android:textColor="@color/lightBlue"
-        android:textSize="14sp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginStart="5dp"/>
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        app:cardBackgroundColor="@color/card_bg"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="0dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="5dp">
-
-            <TextView
-                android:id="@+id/langEnBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
-                android:text="English"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#1AFFFFFF" />
-
-            <TextView
-                android:id="@+id/langHyBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
-                android:text="Հայերեն"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true" />
-
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
     <Button
         android:id="@+id/adminPanelBtn"
         android:layout_width="match_parent"

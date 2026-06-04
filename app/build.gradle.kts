@@ -39,7 +39,6 @@ dependencies {
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     
-    // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
@@ -50,5 +49,4 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
 }
 
-// Move this to the end to prevent mutation of resolved configurations
 apply(plugin = "com.google.gms.google-services")

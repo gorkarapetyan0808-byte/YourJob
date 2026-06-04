@@ -26,6 +26,7 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
     private String userField = "";
     private String userAge = "";
     private boolean isEmployerList = false;
+    private boolean isAdmin = false;
 
     public interface OnItemClickListener {
         void onClick(int position);
@@ -63,6 +64,11 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
         isEmployerList = employerList;
     }
 
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+        notifyDataSetChanged();
+    }
+
     public void setUserPreferences(String city, String field, String age) {
         this.userCity = city != null ? city.trim() : "";
         this.userField = field != null ? field.trim() : "";
@@ -96,8 +102,7 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
 
         String currentUserId = FirebaseAuth.getInstance().getUid();
         
-        // Show delete button only if it's the employer's own list or they are the publisher
-        if (isEmployerList && job.publisherId != null && job.publisherId.equals(currentUserId)) {
+        if (isAdmin || (isEmployerList && job.publisherId != null && job.publisherId.equals(currentUserId))) {
             holder.deleteBtn.setVisibility(View.VISIBLE);
             holder.favBtn.setVisibility(View.GONE);
         } else {

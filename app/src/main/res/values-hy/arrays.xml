@@ -5,25 +5,45 @@
         <item>Երևան</item>
         <item>Գյումրի</item>
         <item>Վանաձոր</item>
+        <item>Վաղարշապատ (Էջմիածին)</item>
         <item>Աբովյան</item>
-        <item>Հրազդան</item>
         <item>Կապան</item>
-        <item>Արտաշատ</item>
+        <item>Հրազդան</item>
         <item>Արմավիր</item>
-        <item>Գորիս</item>
-        <item>Մասիս</item>
-        <item>Չարենցավան</item>
+        <item>Արտաշատ</item>
         <item>Իջևան</item>
+        <item>Գավառ</item>
+        <item>Գորիս</item>
+        <item>Չարենցավան</item>
+        <item>Արարատ</item>
+        <item>Մասիս</item>
+        <item>Աշտարակ</item>
         <item>Սևան</item>
-        <item>Վեդի</item>
-        <item>Եղեգնաձոր</item>
-        <item>Ալավերդի</item>
+        <item>Սպիտակ</item>
         <item>Դիլիջան</item>
         <item>Սիսիան</item>
-        <item>Սպիտակ</item>
+        <item>Եղվարդ</item>
+        <item>Վեդի</item>
+        <item>Վարդենիս</item>
         <item>Մարտունի</item>
-        <item>Աշտարակ</item>
+        <item>Ստեփանավան</item>
+        <item>Եղեգնաձոր</item>
+        <item>Նոր Հաճն</item>
+        <item>Մեծամոր</item>
+        <item>Բերդ</item>
+        <item>Քաջարան</item>
+        <item>Տաշիր</item>
+        <item>Վայք</item>
+        <item>Բյուրեղավան</item>
+        <item>Ալավերդի</item>
+        <item>Ապարան</item>
+        <item>Ջերմուկ</item>
+        <item>Մարալիկ</item>
         <item>Թալին</item>
+        <item>Նոյեմբերյան</item>
+        <item>Ծաղկաձոր</item>
+        <item>Մեղրի</item>
+        <item>Ագարակ</item>
     </string-array>
 
     <string-array name="fields_array">
@@ -36,15 +56,32 @@
         <item>DevOps</item>
         <item>UI/UX Design</item>
         <item>Graphic Design</item>
-        <item>Marketing</item>
+        <item>Մարքեթինգ / PR</item>
         <item>SMM</item>
         <item>SEO</item>
-        <item>Sales</item>
-        <item>Customer Support</item>
-        <item>Finance</item>
-        <item>Accounting</item>
-        <item>HR</item>
-        <item>Education</item>
-        <item>Medicine</item>
+        <item>Վաճառք</item>
+        <item>Հաճախորդների սպասարկում</item>
+        <item>Ֆինանսներ / Բանկային գործ</item>
+        <item>Հաշվապահություն</item>
+        <item>Մարդկային ռեսուրսներ (HR)</item>
+        <item>Կրթություն / Ուսուցում</item>
+        <item>Բժշկություն / Դեղագործություն</item>
+        <item>Շինարարություն / Ճարտարագիտություն</item>
+        <item>Տուրիզմ / Հյուրընկալություն</item>
+        <item>Սպասարկում / Հանրային սնունդ</item>
+        <item>Լոգիստիկա / Առաքում / Վարորդ</item>
+        <item>Գեղեցկություն / Սպա</item>
+        <item>Անվտանգություն</item>
+        <item>Գյուղատնտեսություն</item>
+        <item>Արտադրություն / Գործարան</item>
+        <item>Իրավաբանություն</item>
+        <item>Թարգմանություն / Լեզվաբանություն</item>
+        <item>Անշարժ գույք</item>
+        <item>Ավտոսպասարկում</item>
+        <item>Առևտուր / Գանձապահ</item>
+        <item>Մաքրություն</item>
+        <item>Մեդիա / Լրագրություն</item>
+        <item>Սպորտ / Ֆիթնես</item>
+        <item>Վարչական աշխատանք</item>
     </string-array>
 </resources>

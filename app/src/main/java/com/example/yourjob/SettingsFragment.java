@@ -7,13 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.os.LocaleListCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,17 +33,12 @@ public class SettingsFragment extends Fragment {
         Button logoutBtn = view.findViewById(R.id.settingsLogoutBtn);
         Button deleteAccBtn = view.findViewById(R.id.settingsDeleteAccountBtn);
         Button adminPanelBtn = view.findViewById(R.id.adminPanelBtn);
-        TextView langEnBtn = view.findViewById(R.id.langEnBtn);
-        TextView langHyBtn = view.findViewById(R.id.langHyBtn);
 
         checkAdminStatus(adminPanelBtn);
 
         logoutBtn.setOnClickListener(v -> logoutUser());
         deleteAccBtn.setOnClickListener(v -> showDeleteAccountDialog());
         adminPanelBtn.setOnClickListener(v -> startActivity(new Intent(getContext(), AdminActivity.class)));
-
-        langEnBtn.setOnClickListener(v -> changeLanguage("en"));
-        langHyBtn.setOnClickListener(v -> changeLanguage("hy"));
 
         return view;
     }
@@ -73,15 +65,12 @@ public class SettingsFragment extends Fragment {
                 });
     }
 
-    private void changeLanguage(String langCode) {
-        LocaleListCompat appLocales = LocaleListCompat.forLanguageTags(langCode);
-        AppCompatDelegate.setApplicationLocales(appLocales);
-    }
-
     private void logoutUser() {
         FirebaseAuth.getInstance().signOut();
-        BusinessManager.delete(getContext());
-        JobStorage.clearAll(getContext());
+        if (getContext() != null) {
+            BusinessManager.delete(getContext());
+            JobStorage.clearAll(getContext());
+        }
         Intent intent = new Intent(getActivity(), MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);

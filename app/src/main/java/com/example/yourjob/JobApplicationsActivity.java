@@ -50,7 +50,6 @@ public class JobApplicationsActivity extends AppCompatActivity {
 
         appsRecycler.setLayoutManager(new LinearLayoutManager(this));
         appList = new ArrayList<>();
-        // Passing true because this is the Employer view
         adapter = new ApplicationAdapter(appList, true);
         appsRecycler.setAdapter(adapter);
 

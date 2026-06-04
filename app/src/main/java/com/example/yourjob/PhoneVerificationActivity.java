@@ -50,7 +50,6 @@ public class PhoneVerificationActivity extends AppCompatActivity {
         resendBtn = findViewById(R.id.resendCodeBtn);
         progressBar = findViewById(R.id.verifyProgressBar);
         
-        // Add a status text to layout or just use toast
         phoneDisplay.setText(phoneNumber);
 
         checkPhoneNumberUniqueness();
@@ -76,7 +75,6 @@ public class PhoneVerificationActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()) {
-                            // Number found, check if it belongs to someone else
                             boolean alreadyUsed = false;
                             for (DataSnapshot ds : snapshot.getChildren()) {
                                 String existingUid = ds.getKey();
@@ -102,7 +100,7 @@ public class PhoneVerificationActivity extends AppCompatActivity {
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
                         progressBar.setVisibility(View.GONE);
-                        sendVerificationCode(phoneNumber); // Fallback
+                        sendVerificationCode(phoneNumber);
                     }
                 });
     }

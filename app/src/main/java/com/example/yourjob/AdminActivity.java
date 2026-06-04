@@ -37,6 +37,8 @@ public class AdminActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
 
+        JobStorage.addProfessionalSampleJobs();
+
         recyclerView = findViewById(R.id.adminRecycler);
         progressBar = findViewById(R.id.adminProgressBar);
         tabLayout = findViewById(R.id.adminTabLayout);
@@ -130,10 +132,8 @@ public class AdminActivity extends AppCompatActivity {
 
     private void rejectItem(Object item, String reason) {
         if (item instanceof Job) {
-            // For jobs, we might just delete them or set a reason if we had a field
             mDatabase.child("jobs").child(((Job) item).id).removeValue();
         } else if (item instanceof Business) {
-            // For businesses, we keep the profile but set the reason so they can fix it
             String uid = ((Business) item).userId;
             mDatabase.child("businesses").child(uid).child("rejectionReason").setValue(reason);
             mDatabase.child("businesses").child(uid).child("isApproved").setValue(false);

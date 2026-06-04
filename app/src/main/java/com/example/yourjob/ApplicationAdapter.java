@@ -1,8 +1,10 @@
 package com.example.yourjob;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +13,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.AppViewHolder> {
@@ -42,47 +52,112 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
         if (isEmployer) {
             holder.applicantDetails.setText("From: " + app.applicantName);
             holder.fullInfo.setVisibility(View.VISIBLE);
-            holder.fullInfo.setText("Age: " + app.applicantAge + " | City: " + app.applicantCity);
+            
+            String phone = (app.applicantPhone != null) ? app.applicantPhone : "N/A";
+            holder.fullInfo.setText("Age: " + app.applicantAge + " | City: " + app.applicantCity + "\nPhone: " + phone);
+            
+            holder.viewedStatus.setVisibility(View.GONE);
+            
             if (!app.viewed) markAsViewed(app.id);
         } else {
             holder.applicantDetails.setText("My Application");
             holder.fullInfo.setVisibility(View.GONE);
+            holder.viewedStatus.setVisibility(View.VISIBLE);
+            
+            String statusDetail = "";
+            if ("accepted".equals(app.status)) {
+                statusDetail = " (Accepted)"; 
+            } else if ("rejected".equals(app.status)) {
+                statusDetail = " (Not accepted)";
+            }
+
+            String viewedTxt = app.viewed ? "Viewed" : "Not viewed yet";
+            holder.viewedStatus.setText(viewedTxt + statusDetail);
+            holder.viewedStatus.setTextColor(app.viewed ? Color.parseColor("#4CAF50") : Color.WHITE);
         }
         
         holder.message.setText(app.message);
         holder.cvName.setText("CV: " + app.cvFileName);
 
-        // Status Logic as requested
-        String displayStatus = "";
-        if ("accepted".equals(app.status)) {
-            displayStatus = ""; // Hide if accepted
-        } else if ("rejected".equals(app.status)) {
-            displayStatus = "Not accepted";
-        } else {
-            displayStatus = "Waiting...";
-        }
-
-        // Viewed Logic
-        String viewedTxt = app.viewed ? "Viewed" : "Not viewed yet";
-        holder.viewedStatus.setText(viewedTxt + (displayStatus.isEmpty() ? "" : " (" + displayStatus + ")"));
-        holder.viewedStatus.setTextColor(app.viewed ? Color.parseColor("#4CAF50") : Color.WHITE);
-
         if (app.cvUri != null && !app.cvUri.isEmpty()) {
             holder.openCvBtn.setVisibility(View.VISIBLE);
-            holder.openCvBtn.setOnClickListener(v -> {
-                try {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(app.cvUri));
-                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    v.getContext().startActivity(intent);
-                } catch (Exception e) {
-                    Toast.makeText(v.getContext(), "Cannot open CV", Toast.LENGTH_SHORT).show();
-                }
-            });
+            holder.openCvBtn.setOnClickListener(v -> fetchAndOpenCv(v.getContext(), app, holder.openCvBtn));
         } else {
             holder.openCvBtn.setVisibility(View.GONE);
         }
 
         holder.actionsLayout.setVisibility(View.GONE);
+    }
+
+    private void fetchAndOpenCv(Context context, Application app, Button btn) {
+        if (app.cvUri.startsWith("http") || (app.cvUri.length() > 100 && !app.cvUri.equals("stored_externally"))) {
+            openCvFromData(context, app.cvUri, app.cvFileName);
+            return;
+        }
+
+        btn.setEnabled(false);
+        btn.setText("Loading...");
+
+        FirebaseDatabase.getInstance("https://yourjob-59823-default-rtdb.firebaseio.com/")
+                .getReference("cv_contents").child(app.id)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        btn.setEnabled(true);
+                        btn.setText("Open CV");
+                        String cvData = snapshot.getValue(String.class);
+                        if (cvData != null) {
+                            openCvFromData(context, cvData, app.cvFileName);
+                        } else {
+                            Toast.makeText(context, "CV data not found", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        btn.setEnabled(true);
+                        btn.setText("Open CV");
+                        Toast.makeText(context, "Error loading CV", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void openCvFromData(Context context, String data, String fileName) {
+        try {
+            File file = saveBase64ToFile(context, data, fileName);
+            if (file != null) {
+                Uri contentUri = FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", file);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(contentUri, getMimeType(fileName));
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                context.startActivity(intent);
+            }
+        } catch (Exception e) {
+            Toast.makeText(context, "Cannot open CV", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private File saveBase64ToFile(Context context, String base64Data, String fileName) {
+        try {
+            if (base64Data.contains(",")) base64Data = base64Data.split(",")[1];
+            
+            byte[] pdfAsBytes = Base64.decode(base64Data, Base64.DEFAULT);
+            File filePath = new File(context.getCacheDir(), fileName);
+            FileOutputStream os = new FileOutputStream(filePath, false);
+            os.write(pdfAsBytes);
+            os.flush();
+            os.close();
+            return filePath;
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    private String getMimeType(String fileName) {
+        if (fileName.toLowerCase().endsWith(".pdf")) return "application/pdf";
+        if (fileName.toLowerCase().endsWith(".doc")) return "application/msword";
+        if (fileName.toLowerCase().endsWith(".docx")) return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        return "*/*";
     }
 
     private void markAsViewed(String appId) {
