@@ -35,21 +35,18 @@ public class RoleSelectActivity extends AppCompatActivity {
 
         if (personalBtn != null) {
             personalBtn.setOnClickListener(v -> {
-                Log.d(TAG, "Personal clicked");
                 saveRoleAndContinue("personal");
             });
         }
 
         if (businessBtn != null) {
             businessBtn.setOnClickListener(v -> {
-                Log.d(TAG, "Business clicked");
                 saveRoleAndContinue("business");
             });
         }
 
         if (setupLaterButton != null) {
             setupLaterButton.setOnClickListener(v -> {
-                Log.d(TAG, "Setup later clicked");
                 saveRoleAndContinue("skipped");
             });
         }
@@ -64,11 +61,8 @@ public class RoleSelectActivity extends AppCompatActivity {
             }
         }
 
-        Log.d(TAG, "Saving role: " + role + " for user: " + userId);
-        
         mDatabase.child("users").child(userId).child("role").setValue(role)
                 .addOnSuccessListener(aVoid -> {
-                    Log.d(TAG, "Role saved successfully");
                     Intent intent;
                     if (role.equals("business")) {
                         intent = new Intent(RoleSelectActivity.this, EditBusinessActivity.class);
@@ -82,7 +76,6 @@ public class RoleSelectActivity extends AppCompatActivity {
                     finish();
                 })
                 .addOnFailureListener(e -> {
-                    Log.e(TAG, "Failed to save role", e);
                     Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 });
     }

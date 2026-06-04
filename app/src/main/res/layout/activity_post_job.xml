@@ -19,7 +19,6 @@
             android:textStyle="bold"
             android:layout_marginBottom="20dp"/>
 
-        <!-- TITLE -->
         <EditText
             android:id="@+id/titleInput"
             android:hint="Job Title *"
@@ -29,7 +28,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <!-- DESCRIPTION -->
         <EditText
             android:id="@+id/descInput"
             android:hint="Description *"
@@ -42,7 +40,6 @@
             android:minLines="3"
             android:gravity="top"/>
 
-        <!-- FIELD SPINNER -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -63,7 +60,6 @@
                 android:spinnerMode="dropdown"/>
         </FrameLayout>
 
-        <!-- CITY SPINNER -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -84,7 +80,6 @@
                 android:spinnerMode="dropdown"/>
         </FrameLayout>
 
-        <!-- AGE RANGE -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -133,7 +128,6 @@
             </FrameLayout>
         </LinearLayout>
 
-        <!-- BUSINESS INFO -->
         <TextView
             android:id="@+id/businessInfo"
             android:textColor="@color/lightBlue"
@@ -143,7 +137,6 @@
             android:layout_height="wrap_content"
             android:textStyle="italic"/>
 
-        <!-- SAVE -->
         <Button
             android:id="@+id/saveJobButton"
             android:text="Post Job"

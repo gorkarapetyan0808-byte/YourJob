@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primaryDark"
@@ -21,8 +22,7 @@
         android:layout_height="wrap_content"
         android:background="@color/primaryDark"
         app:tabTextColor="@color/gray_text"
-        app:tabSelectedTextColor="@color/lightBlue"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        app:tabSelectedTextColor="@color/lightBlue">
         <com.google.android.material.tabs.TabItem android:text="Jobs"/>
         <com.google.android.material.tabs.TabItem android:text="Businesses"/>
     </com.google.android.material.tabs.TabLayout>

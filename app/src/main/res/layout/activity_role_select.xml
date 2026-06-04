@@ -18,7 +18,6 @@
         android:layout_marginBottom="50dp"
         android:textAlignment="center"/>
 
-    <!-- Personal Profile Card -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="120dp"
@@ -54,7 +53,6 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Business Profile Card -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="120dp"
