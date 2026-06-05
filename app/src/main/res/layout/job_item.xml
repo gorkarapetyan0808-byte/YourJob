@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+<<<<<<< HEAD
     android:id="@+id/jobCard"
+=======
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="16dp"
@@ -26,12 +29,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
+<<<<<<< HEAD
                 android:layout_toStartOf="@+id/jobActionsLayout"
+=======
+                android:layout_toStartOf="@+id/matchBadge"
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
                 android:text="Job Title"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
+<<<<<<< HEAD
             <LinearLayout
                 android:id="@+id/jobActionsLayout"
                 android:layout_width="wrap_content"
@@ -73,13 +81,32 @@
                     android:textStyle="bold"
                     android:visibility="gone" />
             </LinearLayout>
+=======
+            <TextView
+                android:id="@+id/matchBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/button_background"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="2dp"
+                android:text="MATCH"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         </RelativeLayout>
 
         <TextView
             android:id="@+id/jobCompany"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+<<<<<<< HEAD
             android:layout_marginTop="8dp"
+=======
+            android:layout_marginTop="4dp"
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
             android:text="Company Name"
             android:textColor="@color/lightBlue"
             android:textSize="14sp"

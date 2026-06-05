@@ -16,6 +16,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@android:drawable/ic_dialog_email"
+<<<<<<< HEAD
             app:tint="@color/lightBlue"
             android:layout_marginBottom="20dp"
             xmlns:app="http://schemas.android.com/apk/res-auto" />
@@ -25,6 +26,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/verify_email_title"
+=======
+            android:tint="@color/lightBlue"
+            android:layout_marginBottom="20dp"
+            xmlns:tools="http://schemas.android.com/tools"
+            tools:ignore="UseAppTint" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Verify Your Email"
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
             android:textSize="26sp"
             android:textStyle="bold"
             android:textColor="@color/white"
@@ -34,7 +46,11 @@
             android:id="@+id/verifyEmailSubtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+<<<<<<< HEAD
             android:text="@string/verify_email_msg"
+=======
+            android:text="We've sent a verification link to your email. Please click the link to continue."
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
             android:textColor="@color/lightBlue"
             android:textAlignment="center"
             android:textSize="16sp"
@@ -44,7 +60,11 @@
             android:id="@+id/checkVerificationBtn"
             android:layout_width="match_parent"
             android:layout_height="55dp"
+<<<<<<< HEAD
             android:text="@string/i_verified"
+=======
+            android:text="I've Verified My Email"
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
             android:textColor="@color/white"
             android:background="@drawable/button_background"
             android:textSize="18sp"
@@ -55,7 +75,11 @@
             android:id="@+id/resendEmailBtn"
             android:layout_width="match_parent"
             android:layout_height="55dp"
+<<<<<<< HEAD
             android:text="@string/resend_email"
+=======
+            android:text="Resend Email"
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
             android:textColor="@color/lightBlue"
             android:background="@android:color/transparent"
             android:layout_marginTop="10dp"
@@ -66,7 +90,11 @@
             android:id="@+id/backToLoginBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+<<<<<<< HEAD
             android:text="@string/back_to_login"
+=======
+            android:text="Back to Login"
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
             android:textColor="@color/gray_text"
             android:layout_marginTop="30dp"
             android:padding="10dp"/>

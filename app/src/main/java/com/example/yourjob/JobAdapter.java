@@ -1,11 +1,15 @@
 package com.example.yourjob;
 
+<<<<<<< HEAD
 import android.content.Context;
 import android.content.res.ColorStateList;
+=======
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+<<<<<<< HEAD
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -16,10 +20,17 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+=======
+import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
+
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 import java.util.List;
 
 public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
 
+<<<<<<< HEAD
     private List<Job> jobList;
     private List<String> favoriteIds = new ArrayList<>();
     private String userCity = "";
@@ -27,11 +38,17 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
     private String userAge = "";
     private boolean isEmployerList = false;
     private boolean isAdmin = false;
+=======
+    List<Job> jobList;
+    private String userCity = "";
+    private String userField = "";
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 
     public interface OnItemClickListener {
         void onClick(int position);
     }
 
+<<<<<<< HEAD
     public interface OnFavoriteClickListener {
         void onFavClick(int position, boolean isFav);
     }
@@ -43,11 +60,15 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
     private OnItemClickListener listener;
     private OnFavoriteClickListener favListener;
     private OnDeleteClickListener deleteListener;
+=======
+    private OnItemClickListener listener;
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 
+<<<<<<< HEAD
     public void setOnFavoriteClickListener(OnFavoriteClickListener favListener) {
         this.favListener = favListener;
     }
@@ -56,10 +77,13 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
         this.deleteListener = deleteListener;
     }
 
+=======
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
     public JobAdapter(List<Job> jobList) {
         this.jobList = jobList;
     }
 
+<<<<<<< HEAD
     public void setEmployerList(boolean employerList) {
         isEmployerList = employerList;
     }
@@ -84,15 +108,30 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
     @NonNull
     @Override
     public JobViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+=======
+    public void setUserPreferences(String city, String field) {
+        this.userCity = city != null ? city : "";
+        this.userField = field != null ? field : "";
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public JobViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.job_item, parent, false);
         return new JobViewHolder(view);
     }
 
     @Override
+<<<<<<< HEAD
     public void onBindViewHolder(@NonNull JobViewHolder holder, int position) {
         Job job = jobList.get(position);
         Context context = holder.itemView.getContext();
+=======
+    public void onBindViewHolder(JobViewHolder holder, int position) {
+        Job job = jobList.get(position);
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 
         holder.title.setText(job.title);
         holder.company.setText(job.company);
@@ -100,6 +139,7 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
         holder.locationLabel.setText("📍 " + job.city);
         holder.fieldLabel.setText("💼 " + job.field);
 
+<<<<<<< HEAD
         String currentUserId = FirebaseAuth.getInstance().getUid();
         
         if (isAdmin || (isEmployerList && job.publisherId != null && job.publisherId.equals(currentUserId))) {
@@ -126,12 +166,31 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
             applyMatchStyle(holder, context.getString(R.string.match_good), "#FFD700", 4);
         } else if (score >= 20) {
             applyMatchStyle(holder, context.getString(R.string.match_age), "#9E9E9E", 2);
+=======
+        // MATCH SYSTEM: Highlight if matches user city or field
+        boolean cityMatch = !userCity.isEmpty() && !"Ընտրել քաղաք".equals(userCity) && job.city != null && job.city.equalsIgnoreCase(userCity);
+        boolean fieldMatch = !userField.isEmpty() && !"Ընտրել ոլորտ".equals(userField) && job.field != null && job.field.equalsIgnoreCase(userField);
+
+        if (cityMatch && fieldMatch) {
+            holder.cardView.setStrokeWidth(6);
+            holder.cardView.setStrokeColor(Color.parseColor("#4CAF50")); // Green for perfect match
+            holder.matchBadge.setVisibility(View.VISIBLE);
+            holder.matchBadge.setText("PERFECT MATCH");
+            holder.matchBadge.setBackgroundColor(Color.parseColor("#4CAF50"));
+        } else if (cityMatch || fieldMatch) {
+            holder.cardView.setStrokeWidth(4);
+            holder.cardView.setStrokeColor(Color.parseColor("#FFD700")); // Gold for partial match
+            holder.matchBadge.setVisibility(View.VISIBLE);
+            holder.matchBadge.setText("MATCH");
+            holder.matchBadge.setBackgroundColor(Color.parseColor("#FFD700"));
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         } else {
             holder.cardView.setStrokeWidth(0);
             holder.matchBadge.setVisibility(View.GONE);
         }
     }
 
+<<<<<<< HEAD
     private void applyMatchStyle(JobViewHolder holder, String text, String colorHex, int stroke) {
         int color = Color.parseColor(colorHex);
         holder.matchBadge.setVisibility(View.VISIBLE);
@@ -174,12 +233,28 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
 
         public JobViewHolder(@NonNull View itemView) {
             super(itemView);
+=======
+    @Override
+    public int getItemCount() {
+        return jobList.size();
+    }
+
+    class JobViewHolder extends RecyclerView.ViewHolder {
+
+        TextView title, company, description, locationLabel, fieldLabel, matchBadge;
+        com.google.android.material.card.MaterialCardView cardView;
+
+        public JobViewHolder(View itemView) {
+            super(itemView);
+
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
             title = itemView.findViewById(R.id.jobTitle);
             company = itemView.findViewById(R.id.jobCompany);
             description = itemView.findViewById(R.id.jobDescription);
             locationLabel = itemView.findViewById(R.id.jobLocationLabel);
             fieldLabel = itemView.findViewById(R.id.jobFieldLabel);
             matchBadge = itemView.findViewById(R.id.matchBadge);
+<<<<<<< HEAD
             favBtn = itemView.findViewById(R.id.favBtn);
             deleteBtn = itemView.findViewById(R.id.btnDeleteJob);
             cardView = itemView.findViewById(R.id.jobCard);
@@ -203,8 +278,22 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
                 int pos = getAdapterPosition();
                 if (deleteListener != null && pos != RecyclerView.NO_POSITION) {
                     deleteListener.onDeleteClick(pos);
+=======
+            cardView = (com.google.android.material.card.MaterialCardView) itemView;
+
+            itemView.setOnClickListener(v -> {
+                if (listener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.onClick(position);
+                    }
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
                 }
             });
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82

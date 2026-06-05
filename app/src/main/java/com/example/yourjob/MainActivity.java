@@ -13,9 +13,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+<<<<<<< HEAD
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
+=======
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -47,11 +50,16 @@ public class MainActivity extends AppCompatActivity {
         goToRegister = findViewById(R.id.goToRegisterText);
         progressBar = findViewById(R.id.loginProgressBar);
 
+<<<<<<< HEAD
+=======
+        // Check if user is already logged in
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             checkUserVerificationAndRedirect(currentUser);
         }
 
+<<<<<<< HEAD
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,6 +72,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, RegisterActivity.class));
             }
+=======
+        loginButton.setOnClickListener(v -> loginUser());
+        goToRegister.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, RegisterActivity.class));
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         });
     }
 
@@ -85,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
         loginButton.setVisibility(View.GONE);
 
         mAuth.signInWithEmailAndPassword(email, password)
+<<<<<<< HEAD
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -99,11 +113,28 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "Login failed: " + task.getException().getMessage(),
                                     Toast.LENGTH_SHORT).show();
                         }
+=======
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        if (user != null) {
+                            checkUserVerificationAndRedirect(user);
+                        }
+                    } else {
+                        progressBar.setVisibility(View.GONE);
+                        loginButton.setVisibility(View.VISIBLE);
+                        Toast.makeText(MainActivity.this, "Login failed: " + task.getException().getMessage(),
+                                Toast.LENGTH_SHORT).show();
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
                     }
                 });
     }
 
+<<<<<<< HEAD
     private void checkUserVerificationAndRedirect(final FirebaseUser user) {
+=======
+    private void checkUserVerificationAndRedirect(FirebaseUser user) {
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         if (user.isEmailVerified()) {
             loadAllDataAndProceed(user.getUid());
         } else {
@@ -135,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+<<<<<<< HEAD
     private void loadAllDataAndProceed(final String userId) {
         if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
         
@@ -148,6 +180,18 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
             }
+=======
+    private void loadAllDataAndProceed(String userId) {
+        if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
+        
+        // Load Business Data
+        BusinessManager.loadFromFirebase(this, () -> {
+            // Load Applications
+            JobStorage.loadApplicationsFromFirebase(this, () -> {
+                // Now check role and redirect
+                proceedToRoleOrMenu(userId);
+            });
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         });
     }
 

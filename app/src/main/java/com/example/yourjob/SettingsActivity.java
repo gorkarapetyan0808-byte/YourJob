@@ -1,5 +1,6 @@
 package com.example.yourjob;
 
+<<<<<<< HEAD
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +17,18 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+=======
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.auth.FirebaseAuth;
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -24,6 +37,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+<<<<<<< HEAD
         Button logoutBtn = findViewById(R.id.settingsLogoutBtn);
         Button deleteAccBtn = findViewById(R.id.settingsDeleteAccountBtn);
         Button adminPanelBtn = findViewById(R.id.adminPanelBtn);
@@ -98,6 +112,31 @@ public class SettingsActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(this, "Auth Error. Please re-login first.", Toast.LENGTH_LONG).show();
             }
+=======
+        ImageButton backBtn = findViewById(R.id.backBtn);
+        TextView aboutBtn = findViewById(R.id.aboutBtn);
+        Button logoutBtn = findViewById(R.id.settingsLogoutBtn);
+
+        backBtn.setOnClickListener(v -> finish());
+
+        aboutBtn.setOnClickListener(v -> {
+            Toast.makeText(this, "YourJob App - Find your dream job easily!", Toast.LENGTH_SHORT).show();
+        });
+
+        logoutBtn.setOnClickListener(v -> {
+            // 1. Sign out from Firebase
+            FirebaseAuth.getInstance().signOut();
+            
+            // 2. Clear local data
+            BusinessManager.delete(this);
+            JobStorage.clearAll(this);
+            
+            // 3. Redirect to Login Activity
+            Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         });
     }
 }

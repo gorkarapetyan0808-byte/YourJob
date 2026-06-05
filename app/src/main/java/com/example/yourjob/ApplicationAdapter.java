@@ -1,5 +1,6 @@
 package com.example.yourjob;
 
+<<<<<<< HEAD
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -33,10 +34,29 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
     public ApplicationAdapter(List<Application> applicationList, boolean isEmployer) {
         this.applicationList = applicationList;
         this.isEmployer = isEmployer;
+=======
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
+
+public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.ViewHolder> {
+
+    private List<Application> applicationList;
+
+    public ApplicationAdapter(List<Application> applicationList) {
+        this.applicationList = applicationList;
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
     }
 
     @NonNull
     @Override
+<<<<<<< HEAD
     public AppViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_application, parent, false);
         return new AppViewHolder(view);
@@ -163,6 +183,20 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
     private void markAsViewed(String appId) {
         FirebaseDatabase.getInstance("https://yourjob-59823-default-rtdb.firebaseio.com/")
                 .getReference("applications").child(appId).child("viewed").setValue(true);
+=======
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_application, parent, false);
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Application app = applicationList.get(position);
+        holder.name.setText(app.applicantName);
+        holder.info.setText(app.applicantAge + " years old | " + app.applicantCity);
+        holder.message.setText(app.message);
+        holder.cvName.setText("CV: " + app.cvFileName);
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
     }
 
     @Override
@@ -170,6 +204,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
         return applicationList.size();
     }
 
+<<<<<<< HEAD
     static class AppViewHolder extends RecyclerView.ViewHolder {
         TextView jobTitle, applicantDetails, statusBadge, message, cvName, viewedStatus, fullInfo;
         Button openCvBtn;
@@ -186,6 +221,17 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
             viewedStatus = itemView.findViewById(R.id.appViewedStatus);
             openCvBtn = itemView.findViewById(R.id.btnOpenCv);
             actionsLayout = itemView.findViewById(R.id.employerActionsLayout);
+=======
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView name, info, message, cvName;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            name = itemView.findViewById(R.id.appJobTitle);
+            info = itemView.findViewById(R.id.appDetails);
+            message = itemView.findViewById(R.id.appMessage);
+            cvName = itemView.findViewById(R.id.appCvName);
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         }
     }
 }

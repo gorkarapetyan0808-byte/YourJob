@@ -3,6 +3,7 @@
 
     <item
         android:id="@+id/nav_home"
+<<<<<<< HEAD
         android:title="@string/home"
         android:icon="@android:drawable/ic_menu_search"/>
 
@@ -14,16 +15,40 @@
     <item
         android:id="@+id/nav_profile"
         android:title="@string/profile"
+=======
+        android:title="Home"
+        android:icon="@android:drawable/ic_menu_view"/>
+
+    <item
+        android:id="@+id/nav_applications"
+        android:title="Applications"
+        android:icon="@android:drawable/ic_menu_agenda"/>
+
+    <item
+        android:id="@+id/nav_profile"
+        android:title="Profile"
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         android:icon="@android:drawable/ic_menu_myplaces"/>
 
     <item
         android:id="@+id/nav_business"
+<<<<<<< HEAD
         android:title="@string/my_business"
+=======
+        android:title="Business"
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         android:icon="@drawable/ic_business"/>
 
     <item
         android:id="@+id/nav_settings"
+<<<<<<< HEAD
         android:title="@string/settings"
         android:icon="@drawable/ic_settings"/>
 
 </menu>
+=======
+        android:title="Settings"
+        android:icon="@drawable/ic_settings"/>
+
+</menu>
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82

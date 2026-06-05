@@ -5,6 +5,7 @@
     android:background="@color/primaryDark">
 
     <LinearLayout
+<<<<<<< HEAD
         android:id="@+id/searchLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -57,6 +58,29 @@
         android:layout_height="match_parent"
         android:layout_below="@id/searchLayout"
         android:padding="8dp" />
+=======
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Explore Jobs"
+            android:textColor="@color/white"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:padding="20dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/jobsRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="80dp"/>
+
+    </LinearLayout>
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 
     <ProgressBar
         android:id="@+id/homeProgressBar"
@@ -66,6 +90,7 @@
         android:visibility="gone"
         android:indeterminateTint="@color/lightBlue"/>
 
+<<<<<<< HEAD
     <TextView
         android:id="@+id/noResultsText"
         android:layout_width="wrap_content"
@@ -76,3 +101,6 @@
         android:visibility="gone" />
 
 </RelativeLayout>
+=======
+</RelativeLayout>
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82

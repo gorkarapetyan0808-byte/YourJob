@@ -1,6 +1,7 @@
 package com.example.yourjob;
 
 import android.content.Intent;
+<<<<<<< HEAD
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -8,6 +9,11 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
+=======
+import android.net.Uri;
+import android.os.Bundle;
+import android.text.TextUtils;
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+<<<<<<< HEAD
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +32,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+=======
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.ArrayList;
+import java.util.List;
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 
 public class EditBusinessActivity extends AppCompatActivity {
 
@@ -33,16 +47,25 @@ public class EditBusinessActivity extends AppCompatActivity {
     Button saveBtn, selectLogoBtn;
     ImageView logoPreview;
     Uri selectedLogoUri;
+<<<<<<< HEAD
     String originalPhone = "";
     DatabaseReference mDatabase;
+=======
+
+    String[] cities;
+    String[] fields;
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_business);
 
+<<<<<<< HEAD
         mDatabase = FirebaseDatabase.getInstance("https://yourjob-59823-default-rtdb.firebaseio.com/").getReference();
 
+=======
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         nameInput = findViewById(R.id.editBusinessName);
         phoneInput = findViewById(R.id.editBusinessPhone);
         emailInput = findViewById(R.id.editBusinessEmail);
@@ -52,6 +75,7 @@ public class EditBusinessActivity extends AppCompatActivity {
         selectLogoBtn = findViewById(R.id.selectLogoButton);
         logoPreview = findViewById(R.id.editBusinessLogo);
 
+<<<<<<< HEAD
         setupSpinners();
 
         nameInput.setText(BusinessManager.getName(this));
@@ -82,6 +106,49 @@ public class EditBusinessActivity extends AppCompatActivity {
 
         setSpinnerSelection(citySpinner, getResources().getStringArray(R.array.cities_array), BusinessManager.getCity(this));
         setSpinnerSelection(fieldSpinner, getResources().getStringArray(R.array.fields_array), BusinessManager.getField(this));
+=======
+        // --- DATA FROM PROFILE ---
+
+        cities = new String[]{
+                "Ընտրել քաղաք",
+                "Երևան","Գյումրի","Վանաձոր","Աբովյան","Հրազդան","Կապան",
+                "Արտաշատ","Արմավիր","Գորիս","Մասիս","Չարենցավան",
+                "Իջևան","Սևան","Վեդի","Եղեգնաձոր","Ալավերդի","Դիլիջան",
+                "Սիսիան","Սպիտակ","Մարտունի","Աշտարակ","Թալին"
+        };
+
+        fields = new String[]{
+                "Ընտրել ոլորտ",
+                "Ծրագրավորում / IT","Frontend Developer","Backend Developer","Mobile Developer",
+                "QA / Testing","DevOps","UI/UX Design","Graphic Design",
+                "Marketing","SMM","SEO","Sales","Customer Support",
+                "Finance","Accounting","HR","Education","Medicine"
+        };
+
+        // --- ADAPTERS (Using spinner_item for white text) ---
+
+        ArrayAdapter<String> cityAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, cities);
+        cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        citySpinner.setAdapter(cityAdapter);
+
+        ArrayAdapter<String> fieldAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, fields);
+        fieldAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        fieldSpinner.setAdapter(fieldAdapter);
+
+        // Load existing data
+        nameInput.setText(BusinessManager.getName(this));
+        phoneInput.setText(BusinessManager.getPhone(this));
+        emailInput.setText(BusinessManager.getEmail(this));
+        
+        String logoUriStr = BusinessManager.getLogo(this);
+        if (!TextUtils.isEmpty(logoUriStr)) {
+            selectedLogoUri = Uri.parse(logoUriStr);
+            logoPreview.setImageURI(selectedLogoUri);
+        }
+
+        setSpinnerValue(citySpinner, cities, BusinessManager.getCity(this));
+        setSpinnerValue(fieldSpinner, fields, BusinessManager.getField(this));
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 
         selectLogoBtn.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
@@ -90,6 +157,7 @@ public class EditBusinessActivity extends AppCompatActivity {
             startActivityForResult(intent, 102);
         });
 
+<<<<<<< HEAD
         saveBtn.setOnClickListener(v -> checkPhoneAndSave());
     }
 
@@ -168,6 +236,31 @@ public class EditBusinessActivity extends AppCompatActivity {
         if (value == null) return;
         for (int i = 0; i < array.length; i++) {
             if (array[i].equalsIgnoreCase(value)) {
+=======
+        saveBtn.setOnClickListener(v -> {
+            String name = nameInput.getText().toString();
+            String phone = phoneInput.getText().toString();
+            String email = emailInput.getText().toString();
+            String city = citySpinner.getSelectedItem().toString();
+            String field = fieldSpinner.getSelectedItem().toString();
+            String logoUri = (selectedLogoUri != null) ? selectedLogoUri.toString() : "";
+
+            if (TextUtils.isEmpty(name)) {
+                Toast.makeText(this, "Please enter company name", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            BusinessManager.save(this, name, phone, email, logoUri, city, field);
+            Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
+            finish();
+        });
+    }
+
+    private void setSpinnerValue(Spinner spinner, String[] array, String value) {
+        if (value == null) return;
+        for (int i = 0; i < array.length; i++) {
+            if (array[i].equals(value)) {
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
                 spinner.setSelection(i);
                 break;
             }
@@ -179,9 +272,13 @@ public class EditBusinessActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 102 && resultCode == RESULT_OK && data != null) {
             selectedLogoUri = data.getData();
+<<<<<<< HEAD
             try {
                 getContentResolver().takePersistableUriPermission(selectedLogoUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
             } catch (Exception ignored) {}
+=======
+            getContentResolver().takePersistableUriPermission(selectedLogoUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
             logoPreview.setImageURI(selectedLogoUri);
         }
     }

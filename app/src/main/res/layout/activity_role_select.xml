@@ -11,13 +11,21 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+<<<<<<< HEAD
         android:text="@string/select_role"
+=======
+        android:text="Choose your profile type"
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         android:textSize="28sp"
         android:textStyle="bold"
         android:textColor="@color/white"
         android:layout_marginBottom="50dp"
         android:textAlignment="center"/>
 
+<<<<<<< HEAD
+=======
+    <!-- Personal Profile Card -->
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="120dp"
@@ -38,10 +46,18 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+<<<<<<< HEAD
                 android:text="@string/worker"
                 android:textColor="@color/white"
                 android:textSize="22sp"
                 android:textStyle="bold"/>
+=======
+                android:text="Personal Profile"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:tag="no_click"/>
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -49,10 +65,18 @@
                 android:textColor="@color/lightBlue"
                 android:layout_marginTop="4dp"
                 android:textSize="14sp"
+<<<<<<< HEAD
                 android:visibility="gone"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
+=======
+                android:tag="no_click"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Business Profile Card -->
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="120dp"
@@ -73,10 +97,18 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+<<<<<<< HEAD
                 android:text="@string/employer"
                 android:textColor="@color/white"
                 android:textSize="22sp"
                 android:textStyle="bold"/>
+=======
+                android:text="Business Profile"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:tag="no_click"/>
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -84,7 +116,11 @@
                 android:textColor="@color/lightBlue"
                 android:layout_marginTop="4dp"
                 android:textSize="14sp"
+<<<<<<< HEAD
                 android:visibility="gone"/>
+=======
+                android:tag="no_click"/>
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -92,7 +128,11 @@
         android:id="@+id/setupLaterButton"
         android:layout_width="match_parent"
         android:layout_height="55dp"
+<<<<<<< HEAD
         android:text="@string/setup_later"
+=======
+        android:text="Set up later"
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         android:textColor="@color/white"
         android:backgroundTint="@color/lightBlue"
         android:textAllCaps="false"

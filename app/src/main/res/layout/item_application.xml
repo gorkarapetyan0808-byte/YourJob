@@ -13,6 +13,7 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+<<<<<<< HEAD
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -51,6 +52,15 @@
                     android:textStyle="bold" />
             </LinearLayout>
         </RelativeLayout>
+=======
+        <TextView
+            android:id="@+id/appJobTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 
         <TextView
             android:id="@+id/appDetails"
@@ -61,6 +71,7 @@
             android:textSize="14sp" />
 
         <TextView
+<<<<<<< HEAD
             android:id="@+id/appFullInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -69,11 +80,14 @@
             android:textSize="14sp" />
 
         <TextView
+=======
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
             android:id="@+id/appMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:textColor="@color/white"
+<<<<<<< HEAD
             android:textSize="14sp"
             android:background="#1AFFFFFF"
             android:padding="8dp"/>
@@ -134,6 +148,18 @@
                 android:visibility="gone"/>
 
         </LinearLayout>
+=======
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/appCvName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/lightBlue"
+            android:textSize="12sp"
+            android:textStyle="italic" />
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -5,8 +5,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.database.Cursor;
+<<<<<<< HEAD
 import android.text.TextUtils;
 import android.util.Base64;
+=======
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,9 +17,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+<<<<<<< HEAD
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+=======
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,9 +34,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+<<<<<<< HEAD
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
+=======
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 public class JobDetailsActivity extends AppCompatActivity {
 
     TextView title, company, description, age, field, contact, city;
@@ -37,14 +48,21 @@ public class JobDetailsActivity extends AppCompatActivity {
     Button uploadCvBtn, applyButton;
     ProgressBar progressBar;
 
+<<<<<<< HEAD
     String selectedCvName = "";
     Uri selectedCvUri = null;
     String applicantName, applicantAge, applicantCity, applicantPhone;
+=======
+    String selectedCvName = "No CV attached";
+    String selectedCvUri = "";
+    String applicantName, applicantAge, applicantCity;
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
     
     DatabaseReference mDatabase;
     String userId;
     String jobId;
 
+<<<<<<< HEAD
     private final ActivityResultLauncher<String[]> filePickerLauncher = registerForActivityResult(
             new ActivityResultContracts.OpenDocument(),
             uri -> {
@@ -61,6 +79,8 @@ public class JobDetailsActivity extends AppCompatActivity {
             }
     );
 
+=======
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +115,7 @@ public class JobDetailsActivity extends AppCompatActivity {
         contact.setText(getIntent().getStringExtra("contact"));
         city.setText(getIntent().getStringExtra("city"));
 
+<<<<<<< HEAD
         cvFileNameDisplay.setText("No CV attached");
 
         if (userId != null) {
@@ -222,26 +243,140 @@ public class JobDetailsActivity extends AppCompatActivity {
                     Toast.makeText(this, "Failed to save application", Toast.LENGTH_SHORT).show();
                 }
             });
+=======
+        if (userId != null) {
+            loadUserProfile();
+        }
+
+        uploadCvBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("*/*");
+            String[] mimeTypes = {"application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"};
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+            startActivityForResult(intent, 101);
+        });
+
+        applyButton.setOnClickListener(v -> applyForJob(jobTitleStr));
+    }
+
+    private void loadUserProfile() {
+        if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
+        mDatabase.child("users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (progressBar != null) progressBar.setVisibility(View.GONE);
+                if (snapshot.exists()) {
+                    User user = snapshot.getValue(User.class);
+                    if (user != null && user.name != null && !user.name.isEmpty()) {
+                        applicantName = user.name;
+                        applicantAge = user.age;
+                        applicantCity = user.city;
+                        applicantInfoDisplay.setText("Name: " + applicantName + "\n" +
+                                                   "Age: " + applicantAge + "\n" +
+                                                   "City: " + applicantCity);
+                        applyButton.setEnabled(true);
+                    } else {
+                        applicantInfoDisplay.setText("Please complete your profile first.");
+                        applyButton.setEnabled(false);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                if (progressBar != null) progressBar.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void applyForJob(String jobTitle) {
+        String message = messageInput.getText().toString().trim();
+        
+        if (userId == null) return;
+
+        applyButton.setEnabled(false);
+        String appId = mDatabase.child("applications").push().getKey();
+        
+        Application app = new Application(
+                appId,
+                jobId,
+                jobTitle,
+                userId,
+                applicantName,
+                applicantAge,
+                applicantCity,
+                message,
+                selectedCvName,
+                selectedCvUri
+        );
+
+        if (appId != null) {
+            mDatabase.child("applications").child(appId).setValue(app)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            // 🔥 LOCAL STORAGE SYNC: Add to local list and save to SharedPreferences
+                            JobStorage.loadApplications(JobDetailsActivity.this);
+                            JobStorage.applications.add(app);
+                            JobStorage.saveApplications(JobDetailsActivity.this);
+
+                            Toast.makeText(JobDetailsActivity.this, "Applied Successfully!", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else {
+                            applyButton.setEnabled(true);
+                            Toast.makeText(JobDetailsActivity.this, "Failed to apply", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 101 && resultCode == RESULT_OK && data != null) {
+            Uri uri = data.getData();
+            if (uri != null) {
+                getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                selectedCvUri = uri.toString();
+                selectedCvName = getFileName(uri);
+                cvFileNameDisplay.setText("CV: " + selectedCvName);
+            }
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         }
     }
 
     private String getFileName(Uri uri) {
         String result = null;
+<<<<<<< HEAD
         if ("content".equals(uri.getScheme())) {
             try (Cursor cursor = getContentResolver().query(uri, null, null, null, null)) {
                 if (cursor != null && cursor.moveToFirst()) {
                     int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
                     if (nameIndex >= 0) result = cursor.getString(nameIndex);
+=======
+        if (uri.getScheme().equals("content")) {
+            try (Cursor cursor = getContentResolver().query(uri, null, null, null, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    int index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                    if (index != -1) result = cursor.getString(index);
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
                 }
             }
         }
         if (result == null) {
             result = uri.getPath();
+<<<<<<< HEAD
             if (result != null) {
                 int cut = result.lastIndexOf('/');
                 if (cut != -1) result = result.substring(cut + 1);
             }
         }
         return result != null ? result : "file.pdf";
+=======
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) result = result.substring(cut + 1);
+        }
+        return result;
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
     }
 }

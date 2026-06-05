@@ -1,12 +1,19 @@
 package com.example.yourjob;
 
+<<<<<<< HEAD
 import android.app.AlertDialog;
+=======
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+<<<<<<< HEAD
+=======
+import android.widget.TextView;
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,12 +21,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
+<<<<<<< HEAD
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+=======
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 
 public class SettingsFragment extends Fragment {
 
@@ -30,6 +40,7 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_settings, container, false);
 
+<<<<<<< HEAD
         Button logoutBtn = view.findViewById(R.id.settingsLogoutBtn);
         Button deleteAccBtn = view.findViewById(R.id.settingsDeleteAccountBtn);
         Button adminPanelBtn = view.findViewById(R.id.adminPanelBtn);
@@ -106,3 +117,30 @@ public class SettingsFragment extends Fragment {
         });
     }
 }
+=======
+        // Hide back button because it's now a fragment in bottom nav
+        View backBtn = view.findViewById(R.id.backBtn);
+        if (backBtn != null) backBtn.setVisibility(View.GONE);
+
+        TextView aboutBtn = view.findViewById(R.id.aboutBtn);
+        Button logoutBtn = view.findViewById(R.id.settingsLogoutBtn);
+
+        aboutBtn.setOnClickListener(v -> {
+            Toast.makeText(getContext(), "YourJob App - Find your dream job easily!", Toast.LENGTH_SHORT).show();
+        });
+
+        logoutBtn.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
+            BusinessManager.delete(getContext());
+            JobStorage.clearAll(getContext());
+            
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            getActivity().finish();
+        });
+
+        return view;
+    }
+}
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82

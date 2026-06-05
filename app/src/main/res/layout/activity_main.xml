@@ -17,14 +17,22 @@
             android:layout_height="150dp"
             android:src="@mipmap/ic_launcher"
             android:scaleType="fitCenter"
+<<<<<<< HEAD
             android:layout_marginBottom="40dp"
             android:contentDescription="@string/app_name"/>
+=======
+            android:layout_marginBottom="40dp"/>
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 
         <EditText
             android:id="@+id/emailInput"
             android:layout_width="match_parent"
             android:layout_height="55dp"
+<<<<<<< HEAD
             android:hint="@string/email"
+=======
+            android:hint="Email Address"
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
             android:paddingHorizontal="20dp"
             android:background="@drawable/input_background"
             android:textColor="@color/white"
@@ -36,7 +44,11 @@
             android:id="@+id/passwordInput"
             android:layout_width="match_parent"
             android:layout_height="55dp"
+<<<<<<< HEAD
             android:hint="@string/password"
+=======
+            android:hint="Password"
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
             android:inputType="textPassword"
             android:layout_marginTop="20dp"
             android:paddingHorizontal="20dp"
@@ -49,7 +61,11 @@
             android:id="@+id/loginButton"
             android:layout_width="match_parent"
             android:layout_height="55dp"
+<<<<<<< HEAD
             android:text="@string/login"
+=======
+            android:text="Login"
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
             android:textColor="@color/white"
             android:background="@drawable/button_background"
             android:layout_marginTop="35dp"
@@ -61,7 +77,11 @@
             android:id="@+id/goToRegisterText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+<<<<<<< HEAD
             android:text="@string/register_prompt"
+=======
+            android:text="Don't have an account? Register"
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
             android:textColor="@color/lightBlue"
             android:layout_marginTop="25dp"
             android:textSize="14sp"
@@ -77,4 +97,8 @@
         android:visibility="gone"
         android:indeterminateTint="@color/lightBlue"/>
 
+<<<<<<< HEAD
 </RelativeLayout>
+=======
+</RelativeLayout>
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82

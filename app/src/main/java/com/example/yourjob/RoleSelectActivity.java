@@ -35,18 +35,30 @@ public class RoleSelectActivity extends AppCompatActivity {
 
         if (personalBtn != null) {
             personalBtn.setOnClickListener(v -> {
+<<<<<<< HEAD
+=======
+                Log.d(TAG, "Personal clicked");
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
                 saveRoleAndContinue("personal");
             });
         }
 
         if (businessBtn != null) {
             businessBtn.setOnClickListener(v -> {
+<<<<<<< HEAD
+=======
+                Log.d(TAG, "Business clicked");
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
                 saveRoleAndContinue("business");
             });
         }
 
         if (setupLaterButton != null) {
             setupLaterButton.setOnClickListener(v -> {
+<<<<<<< HEAD
+=======
+                Log.d(TAG, "Setup later clicked");
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
                 saveRoleAndContinue("skipped");
             });
         }
@@ -61,8 +73,16 @@ public class RoleSelectActivity extends AppCompatActivity {
             }
         }
 
+<<<<<<< HEAD
         mDatabase.child("users").child(userId).child("role").setValue(role)
                 .addOnSuccessListener(aVoid -> {
+=======
+        Log.d(TAG, "Saving role: " + role + " for user: " + userId);
+        
+        mDatabase.child("users").child(userId).child("role").setValue(role)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "Role saved successfully");
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
                     Intent intent;
                     if (role.equals("business")) {
                         intent = new Intent(RoleSelectActivity.this, EditBusinessActivity.class);
@@ -76,6 +96,10 @@ public class RoleSelectActivity extends AppCompatActivity {
                     finish();
                 })
                 .addOnFailureListener(e -> {
+<<<<<<< HEAD
+=======
+                    Log.e(TAG, "Failed to save role", e);
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
                     Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 });
     }

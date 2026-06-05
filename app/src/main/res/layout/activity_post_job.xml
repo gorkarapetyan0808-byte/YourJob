@@ -19,6 +19,10 @@
             android:textStyle="bold"
             android:layout_marginBottom="20dp"/>
 
+<<<<<<< HEAD
+=======
+        <!-- TITLE -->
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         <EditText
             android:id="@+id/titleInput"
             android:hint="Job Title *"
@@ -28,6 +32,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
+<<<<<<< HEAD
+=======
+        <!-- DESCRIPTION -->
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         <EditText
             android:id="@+id/descInput"
             android:hint="Description *"
@@ -40,6 +48,10 @@
             android:minLines="3"
             android:gravity="top"/>
 
+<<<<<<< HEAD
+=======
+        <!-- FIELD SPINNER -->
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -60,6 +72,10 @@
                 android:spinnerMode="dropdown"/>
         </FrameLayout>
 
+<<<<<<< HEAD
+=======
+        <!-- CITY SPINNER -->
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -80,6 +96,10 @@
                 android:spinnerMode="dropdown"/>
         </FrameLayout>
 
+<<<<<<< HEAD
+=======
+        <!-- AGE RANGE -->
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -128,6 +148,10 @@
             </FrameLayout>
         </LinearLayout>
 
+<<<<<<< HEAD
+=======
+        <!-- BUSINESS INFO -->
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         <TextView
             android:id="@+id/businessInfo"
             android:textColor="@color/lightBlue"
@@ -137,6 +161,10 @@
             android:layout_height="wrap_content"
             android:textStyle="italic"/>
 
+<<<<<<< HEAD
+=======
+        <!-- SAVE -->
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         <Button
             android:id="@+id/saveJobButton"
             android:text="Post Job"

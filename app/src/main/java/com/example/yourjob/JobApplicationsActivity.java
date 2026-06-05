@@ -39,10 +39,14 @@ public class JobApplicationsActivity extends AppCompatActivity {
         jobId = getIntent().getStringExtra("jobId");
         String jobTitle = getIntent().getStringExtra("jobTitle");
 
+<<<<<<< HEAD
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Applications: " + jobTitle);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+=======
+        setTitle("Applications for: " + jobTitle);
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 
         appsRecycler = findViewById(R.id.appsRecycler);
         progressBar = findViewById(R.id.appsProgressBar);
@@ -50,7 +54,11 @@ public class JobApplicationsActivity extends AppCompatActivity {
 
         appsRecycler.setLayoutManager(new LinearLayoutManager(this));
         appList = new ArrayList<>();
+<<<<<<< HEAD
         adapter = new ApplicationAdapter(appList, true);
+=======
+        adapter = new ApplicationAdapter(appList);
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         appsRecycler.setAdapter(adapter);
 
         mDatabase = FirebaseDatabase.getInstance("https://yourjob-59823-default-rtdb.firebaseio.com/").getReference().child("applications");
@@ -89,10 +97,13 @@ public class JobApplicationsActivity extends AppCompatActivity {
                     }
                 });
     }
+<<<<<<< HEAD
 
     @Override
     public boolean onSupportNavigateUp() {
         finish();
         return true;
     }
+=======
+>>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 }
