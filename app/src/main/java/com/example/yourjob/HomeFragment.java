@@ -1,6 +1,5 @@
 package com.example.yourjob;
 
-<<<<<<< HEAD
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,14 +14,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-=======
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
->>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -39,19 +30,14 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
-<<<<<<< HEAD
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-=======
-import java.util.List;
->>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 
 public class HomeFragment extends Fragment {
 
     RecyclerView jobsRecycler;
     JobAdapter adapter;
-<<<<<<< HEAD
     List<Job> jobList = new ArrayList<>();
     List<Job> filteredList = new ArrayList<>();
     Set<String> favoriteIds = new HashSet<>(); 
@@ -64,28 +50,15 @@ public class HomeFragment extends Fragment {
     String userCity = "", userField = "", userAge = "";
     
     private ValueEventListener jobsListener;
-=======
-    List<Job> jobList;
-    ProgressBar progressBar;
-    DatabaseReference mDatabase;
-    String userId;
->>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 
     public HomeFragment() {}
 
     @Override
-<<<<<<< HEAD
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-=======
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
->>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         jobsRecycler = view.findViewById(R.id.jobsRecycler);
         progressBar = view.findViewById(R.id.homeProgressBar);
-<<<<<<< HEAD
         searchEditText = view.findViewById(R.id.searchEditText);
         cityFilterSpinner = view.findViewById(R.id.filterCitySpinner);
         fieldFilterSpinner = view.findViewById(R.id.filterFieldSpinner);
@@ -93,18 +66,11 @@ public class HomeFragment extends Fragment {
         
         jobsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new JobAdapter(filteredList);
-=======
-        
-        jobsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        jobList = new ArrayList<>();
-        adapter = new JobAdapter(jobList);
->>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         jobsRecycler.setAdapter(adapter);
 
         userId = FirebaseAuth.getInstance().getUid();
         mDatabase = FirebaseDatabase.getInstance("https://yourjob-59823-default-rtdb.firebaseio.com/").getReference();
 
-<<<<<<< HEAD
         setupFilterSpinners();
         loadUserPrefsAndFavorites();
 
@@ -145,29 +111,11 @@ public class HomeFragment extends Fragment {
             if (position >= 0 && position < filteredList.size()) {
                 showDeleteConfirmation(filteredList.get(position).id);
             }
-=======
-        loadUserPrefsAndJobs();
-
-        // CLICK
-        adapter.setOnItemClickListener(position -> {
-            Job job = jobList.get(position);
-            Intent intent = new Intent(getContext(), JobDetailsActivity.class);
-            intent.putExtra("id", job.id);
-            intent.putExtra("title", job.title);
-            intent.putExtra("company", job.company);
-            intent.putExtra("description", job.description);
-            intent.putExtra("age", job.age);
-            intent.putExtra("field", job.field);
-            intent.putExtra("contact", job.contact);
-            intent.putExtra("city", job.city);
-            startActivity(intent);
->>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         });
 
         return view;
     }
 
-<<<<<<< HEAD
     private void showDeleteConfirmation(String jobId) {
         new AlertDialog.Builder(getContext())
                 .setTitle("Delete Job")
@@ -185,16 +133,11 @@ public class HomeFragment extends Fragment {
             setupJobsListener();
             return;
         }
-=======
-    private void loadUserPrefsAndJobs() {
-        if (userId == null) return;
->>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         
         mDatabase.child("users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-<<<<<<< HEAD
                     userCity = snapshot.child("city").getValue(String.class);
                     userField = snapshot.child("field").getValue(String.class);
                     userAge = snapshot.child("age").getValue(String.class);
@@ -233,23 +176,11 @@ public class HomeFragment extends Fragment {
                     sortAndFilter();
                 }
             }
-=======
-                    String city = snapshot.child("city").getValue(String.class);
-                    String field = snapshot.child("field").getValue(String.class);
-                    adapter.setUserPreferences(city != null ? city : "", field != null ? field : "");
-                    loadJobsFromFirebase(city, field);
-                } else {
-                    loadJobsFromFirebase("", "");
-                }
-            }
-
->>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
     }
 
-<<<<<<< HEAD
     private void toggleFavorite(String jobId, boolean isFav) {
         if (userId == null) return;
         
@@ -417,50 +348,3 @@ public class HomeFragment extends Fragment {
         }
     }
 }
-=======
-    private void loadJobsFromFirebase(String userCity, String userField) {
-        if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
-        
-        mDatabase.child("jobs").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                jobList.clear();
-                
-                if (!snapshot.exists()) {
-                    // Sample jobs for testing Match system
-                    jobList.add(new Job("s1", "Android Developer", "IT Solutions", "Perfect match test", "20-30", "IT / Programming", "123", "Yerevan", "system"));
-                    jobList.add(new Job("s2", "Sales Manager", "Shop Center", "Partial match test (City)", "20-40", "Sales", "123", "Yerevan", "system"));
-                    jobList.add(new Job("s3", "Accountant", "Finance Bank", "No match test", "25-45", "Finance", "123", "Gyumri", "system"));
-                }
-
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Job job = dataSnapshot.getValue(Job.class);
-                    if (job != null) jobList.add(job);
-                }
-
-                // Sorting: Matches first
-                Collections.sort(jobList, (j1, j2) -> {
-                    int score1 = getMatchScore(j1, userCity, userField);
-                    int score2 = getMatchScore(j2, userCity, userField);
-                    return Integer.compare(score2, score1); // Descending
-                });
-
-                adapter.notifyDataSetChanged();
-                if (progressBar != null) progressBar.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                if (progressBar != null) progressBar.setVisibility(View.GONE);
-            }
-        });
-    }
-
-    private int getMatchScore(Job job, String city, String field) {
-        int score = 0;
-        if (job.city != null && job.city.equalsIgnoreCase(city)) score += 2;
-        if (job.field != null && job.field.equalsIgnoreCase(field)) score += 2;
-        return score;
-    }
-}
->>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82

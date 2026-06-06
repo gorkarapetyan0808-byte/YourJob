@@ -118,7 +118,7 @@ public class SettingsFragment extends Fragment {
     }
 }
 =======
-        // Hide back button because it's now a fragment in bottom nav
+
         View backBtn = view.findViewById(R.id.backBtn);
         if (backBtn != null) backBtn.setVisibility(View.GONE);
 

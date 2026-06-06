@@ -15,10 +15,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.ArrayList;
-<<<<<<< HEAD
 import java.util.List;
-=======
->>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 
 public class JobStorage {
     public static ArrayList<Job> jobs = new ArrayList<>();
@@ -27,18 +24,11 @@ public class JobStorage {
     private static final String PREF_NAME = "jobs_data";
     private static final String KEY_JOBS = "all_jobs";
     private static final String KEY_APPS = "all_applications";
-<<<<<<< HEAD
     private static final String FIREBASE_URL = "https://yourjob-59823-default-rtdb.firebaseio.com/";
-=======
->>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 
     public static void saveJobs(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-<<<<<<< HEAD
-=======
-        
->>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         try {
             JSONArray array = new JSONArray();
             for (Job job : jobs) {
@@ -52,17 +42,45 @@ public class JobStorage {
                 obj.put("contact", job.contact);
                 obj.put("city", job.city);
                 obj.put("publisherId", job.publisherId);
-<<<<<<< HEAD
                 obj.put("isApproved", job.isApproved);
                 obj.put("timestamp", job.timestamp);
-=======
->>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
                 array.put(obj);
             }
             editor.putString(KEY_JOBS, array.toString());
             editor.apply();
-<<<<<<< HEAD
         } catch (Exception e) { e.printStackTrace(); }
+    }
+
+    public static void loadJobs(Context context) {
+        if (!jobs.isEmpty()) return;
+        
+        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        String json = prefs.getString(KEY_JOBS, null);
+        
+        if (json != null) {
+            try {
+                JSONArray array = new JSONArray(json);
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject obj = array.getJSONObject(i);
+                    Job job = new Job(
+                        obj.optString("id", ""),
+                        obj.getString("title"),
+                        obj.getString("company"),
+                        obj.getString("description"),
+                        obj.getString("age"),
+                        obj.getString("field"),
+                        obj.getString("contact"),
+                        obj.getString("city"),
+                        obj.optString("publisherId", "")
+                    );
+                    job.isApproved = obj.optBoolean("isApproved", false);
+                    job.timestamp = obj.optLong("timestamp", 0);
+                    jobs.add(job);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static void addProfessionalSampleJobs() {
@@ -95,46 +113,7 @@ public class JobStorage {
             job.isApproved = true; 
             job.timestamp = System.currentTimeMillis() - (i * 3600000); 
             mDatabase.child(fixedId).setValue(job);
-=======
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-    }
-
-    public static void loadJobs(Context context) {
-        if (!jobs.isEmpty()) return;
-        
-        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        String json = prefs.getString(KEY_JOBS, null);
-        
-        if (json != null) {
-            try {
-                JSONArray array = new JSONArray(json);
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject obj = array.getJSONObject(i);
-                    jobs.add(new Job(
-                        obj.optString("id", ""),
-                        obj.getString("title"),
-                        obj.getString("company"),
-                        obj.getString("description"),
-                        obj.getString("age"),
-                        obj.getString("field"),
-                        obj.getString("contact"),
-                        obj.getString("city"),
-                        obj.optString("publisherId", "")
-                    ));
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public static void clearAll(Context context) {
-        jobs.clear();
-        applications.clear();
-        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        prefs.edit().clear().apply();
     }
 
     public static void saveApplications(Context context) {
@@ -188,24 +167,17 @@ public class JobStorage {
             } catch (Exception e) {
                 e.printStackTrace();
             }
->>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         }
     }
 
     public static void loadApplicationsFromFirebase(Context context, Runnable onComplete) {
         String userId = FirebaseAuth.getInstance().getUid();
-<<<<<<< HEAD
         if (userId == null) {
             if (onComplete != null) onComplete.run();
             return;
         }
 
         DatabaseReference mDatabase = FirebaseDatabase.getInstance(FIREBASE_URL).getReference();
-=======
-        if (userId == null) return;
-
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance("https://yourjob-59823-default-rtdb.firebaseio.com/").getReference();
->>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         mDatabase.child("applications").orderByChild("applicantId").equalTo(userId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -214,11 +186,11 @@ public class JobStorage {
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             Application app = ds.getValue(Application.class);
                             if (app != null) {
-<<<<<<< HEAD
                                 if (app.id == null || app.id.isEmpty()) app.id = ds.getKey();
                                 applications.add(app);
                             }
                         }
+                        saveApplications(context);
                         if (onComplete != null) onComplete.run();
                     }
                     @Override public void onCancelled(@NonNull DatabaseError error) { if (onComplete != null) onComplete.run(); }
@@ -228,21 +200,7 @@ public class JobStorage {
     public static void clearAll(Context context) {
         jobs.clear();
         applications.clear();
+        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        prefs.edit().clear().apply();
     }
 }
-=======
-                                applications.add(app);
-                            }
-                        }
-                        saveApplications(context);
-                        if (onComplete != null) onComplete.run();
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        if (onComplete != null) onComplete.run();
-                    }
-                });
-    }
-}
->>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82

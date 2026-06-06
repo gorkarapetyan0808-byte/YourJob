@@ -2,14 +2,11 @@ package com.example.yourjob;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-<<<<<<< HEAD
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Base64;
-=======
->>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 
 import androidx.annotation.NonNull;
 
@@ -20,20 +17,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-<<<<<<< HEAD
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
-=======
->>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 public class BusinessManager {
 
     private static final String PREF_NAME = "business_profile";
 
-<<<<<<< HEAD
     public interface SaveCompleteListener {
         void onSaveComplete(boolean success);
     }
+
+    private static Business currentBusiness;
 
     public static void save(final Context context, final String name, final String phone, final String email, Uri logoUri, final String city, final String field, final SaveCompleteListener listener) {
         final String userId = FirebaseAuth.getInstance().getUid();
@@ -95,22 +90,10 @@ public class BusinessManager {
         editor.putString("phone", phone);
         editor.putString("email", email);
         editor.putString("logo", logoData);
-=======
-    public static void save(Context context, String name, String phone, String email, String logoUri, String city, String field) {
-        // 1. Save locally
-        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-
-        editor.putString("name", name);
-        editor.putString("phone", phone);
-        editor.putString("email", email);
-        editor.putString("logo", logoUri);
->>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         editor.putString("city", city);
         editor.putString("field", field);
         editor.apply();
 
-<<<<<<< HEAD
         DatabaseReference mDatabase = FirebaseDatabase.getInstance("https://yourjob-59823-default-rtdb.firebaseio.com/").getReference();
         
         mDatabase.child("businesses").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -123,6 +106,7 @@ public class BusinessManager {
                 Business business = new Business(userId, name, phone, email, logoData, city, field);
                 business.isApproved = approved;
                 business.rejectionReason = reason;
+                currentBusiness = business;
 
                 mDatabase.child("businesses").child(userId).setValue(business).addOnCompleteListener(task -> {
                     if (listener != null) listener.onSaveComplete(task.isSuccessful());
@@ -138,20 +122,6 @@ public class BusinessManager {
             if (onComplete != null) onComplete.run();
             return;
         }
-=======
-        // 2. Save to Firebase
-        String userId = FirebaseAuth.getInstance().getUid();
-        if (userId != null) {
-            DatabaseReference mDatabase = FirebaseDatabase.getInstance("https://yourjob-59823-default-rtdb.firebaseio.com/").getReference();
-            Business business = new Business(userId, name, phone, email, logoUri, city, field);
-            mDatabase.child("businesses").child(userId).setValue(business);
-        }
-    }
-
-    public static void loadFromFirebase(Context context, Runnable onComplete) {
-        String userId = FirebaseAuth.getInstance().getUid();
-        if (userId == null) return;
->>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
 
         DatabaseReference mDatabase = FirebaseDatabase.getInstance("https://yourjob-59823-default-rtdb.firebaseio.com/").getReference();
         mDatabase.child("businesses").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -159,25 +129,14 @@ public class BusinessManager {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     Business business = snapshot.getValue(Business.class);
-<<<<<<< HEAD
-                    if (business != null) saveLocally(context, business);
-                }
-                if (onComplete != null) onComplete.run();
-            }
-            @Override public void onCancelled(@NonNull DatabaseError error) { if (onComplete != null) onComplete.run(); }
-=======
                     if (business != null) {
+                        currentBusiness = business;
                         saveLocally(context, business);
                     }
                 }
                 if (onComplete != null) onComplete.run();
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                if (onComplete != null) onComplete.run();
-            }
->>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
+            @Override public void onCancelled(@NonNull DatabaseError error) { if (onComplete != null) onComplete.run(); }
         });
     }
 
@@ -196,39 +155,30 @@ public class BusinessManager {
     public static void delete(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         prefs.edit().clear().apply();
-<<<<<<< HEAD
+        currentBusiness = null;
         String userId = FirebaseAuth.getInstance().getUid();
         if (userId != null) {
             FirebaseDatabase.getInstance("https://yourjob-59823-default-rtdb.firebaseio.com/").getReference()
                     .child("businesses").child(userId).removeValue();
-=======
-
-        String userId = FirebaseAuth.getInstance().getUid();
-        if (userId != null) {
-            DatabaseReference mDatabase = FirebaseDatabase.getInstance("https://yourjob-59823-default-rtdb.firebaseio.com/").getReference();
-            mDatabase.child("businesses").child(userId).removeValue();
->>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
         }
     }
 
-    public static String get(Context context, String key) {
-<<<<<<< HEAD
-        return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE).getString(key, "");
-    }
-=======
-        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        return prefs.getString(key, "");
+    public static Business getBusiness() {
+        return currentBusiness;
     }
 
->>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
+    public static void setBusiness(Business business) {
+        currentBusiness = business;
+    }
+
+    public static String get(Context context, String key) {
+        return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE).getString(key, "");
+    }
+
     public static String getName(Context context) { return get(context, "name"); }
     public static String getPhone(Context context) { return get(context, "phone"); }
     public static String getEmail(Context context) { return get(context, "email"); }
     public static String getLogo(Context context) { return get(context, "logo"); }
     public static String getCity(Context context) { return get(context, "city"); }
     public static String getField(Context context) { return get(context, "field"); }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 0c6b6eaf772c754685d8cc660365b11912584f82
